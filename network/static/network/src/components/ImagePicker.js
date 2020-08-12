@@ -1,12 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
-import { Label } from "./styled-components";
-import { theme } from "../config/theme";
 
-const ImagePicker = () => {
-  const [image, setImage] = useState("");
-  const [isUploaded, setIsUploaded] = useState(false);
-
+const ImagePicker = ({
+  image,
+  onChange,
+  label,
+  borderColor,
+  width,
+  height,
+}) => {
   const profilePictureRef = useRef();
 
   const openFileSelector = () => {
@@ -20,7 +22,7 @@ const ImagePicker = () => {
   const handleFile = (file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      setImage(e.target.result);
+      onChange({ asBase64: e.target.result, file });
     };
     reader.readAsDataURL(file[0]);
   };
@@ -31,8 +33,8 @@ const ImagePicker = () => {
   };
 
   return (
-    <Div>
-      <Label>Add Profile Picture</Label>
+    <Div borderColor={borderColor} width={width} height={height}>
+      <Label>{label}</Label>
       <div
         onDragEnter={handleDragAndDrop}
         onDragLeave={handleDragAndDrop}
@@ -41,10 +43,6 @@ const ImagePicker = () => {
         onClick={openFileSelector}
         className={image ? "drop-region has-image" : "drop-region"}
       >
-        <div className={isUploaded ? "success-upload" : "display-none"}>
-          <i className="far fa-check-circle"></i>
-          <span>Uploaded</span>
-        </div>
         <div className={image ? "display-none" : "drop-message"}>
           Drag & Drop images or click to upload
           <input
@@ -58,98 +56,75 @@ const ImagePicker = () => {
         <div className="drop-image-preview">
           <img
             className={image ? "show-image" : "display-none"}
-            src={image}
+            src={image?.asBase64}
             alt="profile"
           />
         </div>
       </div>
-      <button
-        disabled={isUploaded}
-        className="btn-upload"
-        onClick={handleUpload}
-      >
-        Upload
-      </button>
     </Div>
   );
 };
 
+export const Label = styled.label`
+  display: block;
+  padding: 0px 0px 3px 5px;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+`;
+
 const Div = styled.div`
-    display: block;
-    margin-top: 20px;
-    width: 165px;
-    .btn-upload {
-        border: 1px solid ${theme.color.lightGreen};
-        padding: 5px 10px;
-        color: ${theme.color.lightGreen};
-        margin-top: 15px;
-        width: 100%;
-        border-radius: 25px;
-        transition: all .3s;
-        :hover {
-            background-color: ${theme.color.lightGreen};
-            color: #fff;
-        }
-        :disabled {
-            color: #ccc;
-            border-color: #ccc;
-            cursor: not-allowed;
-            background-color: #fff;
-        }
+  display: block;
+  .drop-region {
+    position: relative;
+    display: table-cell;
+    ${({ borderColor, width, height }) =>
+      `width:${width};height:${height};border: 3px dashed ${borderColor};`}
+    font-size: 0.8rem;
+    vertical-align: middle;
+    padding: 0 10px;
+    text-align: center;
+    overflow: hidden;
+    cursor: move;
+    input[type="file"] {
+      display: none;
     }
-    .drop-region {
-        position: relative;
-        display: table-cell;
-        width: 160px;
-        height: 160px;
-        border: 3px dashed ${theme.color.lightGreen};
-        font-size: 0.8rem;
-        vertical-align: middle;
-        padding: 0 10px;
-        text-align: center;
-        overflow: hidden;
-        cursor: move;
-        input[type="file"] {
-            display: none;
-        }
-        &.has-image {
-            border: none;
-            padding: 0;
-        }
-        .success-upload {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 160px;
-            height: 160px;
-            background-color: rgba(0,0,0,0.7);
-            font-size: 1.6rem;
-            color: ${theme.color.lightGreen};
-            transition: all .3s
-            display: block;
-            span {
-                display: block;
-                color: #fff;
-                font-size: 0.6rem;
-                text-transform: uppercase;
-                margin-top: 10px;
-            }
-        }
+    &.has-image {
+      border: none;
+      padding: 0;
     }
-    .display-none {
-        display: none;
-    }
-    .show-image {
+    .success-upload {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 160px;
+      height: 160px;
+      background-color: rgba(0, 0, 0, 0.7);
+      font-size: 1.6rem;
+      color: #00e676;
+      transition: all 0.3s;
+      display: block;
+      span {
         display: block;
-        max-width: 100%;
-        max-height: 100%;
-        width: 160px;
-        height: 160px;
+        color: #fff;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        margin-top: 10px;
+      }
     }
+  }
+  .display-none {
+    display: none;
+  }
+  .show-image {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    ${({ width }) => `width:${width};`}
+  }
 `;
 
 export default ImagePicker;
