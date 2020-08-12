@@ -53,7 +53,7 @@ const ImagePicker = ({
             multiple={false}
           />
         </div>
-        <div className="drop-image-preview">
+        <div className={image ? "drop-image-preview" : "display-none"}>
           <img
             className={image ? "show-image" : "display-none"}
             src={image?.asBase64}
@@ -116,14 +116,18 @@ const Div = styled.div`
       }
     }
   }
+  .drop-image-preview {
+    ${({ width, height }) => `width:${width};height:${height};`};
+    overflow-y: hidden;
+  }
   .display-none {
     display: none;
   }
   .show-image {
     display: block;
-    max-width: 100%;
-    max-height: 100%;
-    ${({ width }) => `width:${width};`}
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 
