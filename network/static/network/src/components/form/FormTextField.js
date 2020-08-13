@@ -10,10 +10,11 @@ const FormTextField = ({
 }) => {
   const {
     errors,
-    setFieldTouched,
-    setFieldValue,
     touched,
     values,
+    status,
+    setFieldTouched,
+    setFieldValue,
   } = useFormikContext();
 
   return (
@@ -26,12 +27,17 @@ const FormTextField = ({
         onChange={(e) => setFieldValue(name, e.target.value)}
         value={values[name]}
         className={`form-control ${
-          errors[name] && touched[name] ? "is-invalid" : ""
+          (errors[name] && touched[name]) || (status && status[name])
+            ? "is-invalid"
+            : ""
         }`}
         widget_type={widget}
         {...otherProps}
       />
-      <div className="invalid-feedback">{errors[name]}</div>
+      <div className="invalid-feedback">
+        {errors[name]}
+        {status && status[name]}
+      </div>
     </div>
   );
 };

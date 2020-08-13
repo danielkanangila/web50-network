@@ -12,6 +12,9 @@ from .auth import (
 urlpatterns = [
     path('auth', include('knox.urls')),
     path("", views.index, name="index"),
+    path("login", views.index, name="login"),
+    path("logout", views.index, name="logout"),
+    path("register", views.index, name="register"),
     path("api/auth/register", RegisterAPI.as_view(), name="auth_register"),
     path("api/auth/login", LoginAPI.as_view(), name="auth_login"),
     path("api/auth/logout", knox_views.LogoutView.as_view(), name="auth_logout"),

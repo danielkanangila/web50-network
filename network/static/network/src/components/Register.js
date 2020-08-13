@@ -6,6 +6,7 @@ import { Form, FormTextField } from "./form";
 import useApi from "../hooks/useApi";
 import authApi from "../api/auth";
 import useAuth from "../hooks/useAuth";
+import { transformBackendErrors } from "../utils";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -21,16 +22,30 @@ const Register = () => {
   const auth = useAuth();
   const history = useHistory();
 
-  const register = (data) => {
-    const { email, password } = data;
-    const result = registerApi.request({ username: email, password });
-    console.log(result);
-    //history.push("/complete-registration");
+  const register = async (data, { setStatus, resetForm }) => {
+    const response = await registerApi.request(
+      data.email,
+      data.email,
+      data.password
+    );
+    if (response.status === 400) {
+      const errors = transformBackendErrors(response.data);
+      return setStatus(errors);
+    }
+    if (response.status === 200) {
+      auth.login(response.data);
+      history.push("/complete-registration");
+    }
   };
 
   return (
     <Form
-      initialValues={{ email: "", password: "", confirmPassword: "" }}
+      initialValues={{
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      }}
       onSubmit={register}
       validationSchema={validationSchema}
       className="card auth-card"

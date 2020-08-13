@@ -1,7 +1,12 @@
-import { create } from "apisauce";
+import axios from "axios";
 import settings from "../config/settings";
 
-const apiClient = create({
+export const getAuthToken = () => {
+  const userStr = localStorage.getItem("user");
+  return userStr ? JSON.parse(userStr).token : "";
+};
+
+const apiClient = axios.create({
   baseURL: settings.apiURL,
 });
 
