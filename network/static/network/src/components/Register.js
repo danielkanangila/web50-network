@@ -3,6 +3,9 @@ import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
 
 import { Form, FormTextField } from "./form";
+import useApi from "../hooks/useApi";
+import authApi from "../api/auth";
+import useAuth from "../hooks/useAuth";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -14,11 +17,17 @@ const validationSchema = Yup.object().shape({
 });
 
 const Register = () => {
+  const registerApi = useApi(authApi.register);
+  const auth = useAuth();
   const history = useHistory();
+
   const register = (data) => {
-    //console.log(data);
-    history.push("/complete-registration");
+    const { email, password } = data;
+    const result = registerApi.request({ username: email, password });
+    console.log(result);
+    //history.push("/complete-registration");
   };
+
   return (
     <Form
       initialValues={{ email: "", password: "", confirmPassword: "" }}
