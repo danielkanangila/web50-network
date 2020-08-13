@@ -14,8 +14,11 @@ const Form = ({
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, status }) => (
         <form onSubmit={handleSubmit} {...otherProps}>
+          {status?.details && (
+            <div className="alert alert-danger">{status}</div>
+          )}
           {children}
         </form>
       )}

@@ -53,4 +53,4 @@ class UserAPI(generics.RetrieveUpdateAPIView):
         return self.request.user
 
     def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+        return self.update(request, args, kwargs)
