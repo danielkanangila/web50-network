@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from rest_framework import generics, permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from knox.models import AuthToken
@@ -47,10 +48,11 @@ class UserAPI(generics.RetrieveUpdateAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+    parser_classes = [MultiPartParser, FormParser]
     serializer_class = UserSerializer
 
     def get_object(self):
         return self.request.user
 
     def put(self, request, *args, **kwargs):
-        return self.update(request, args, kwargs)
+        return self.update(request, *args, **kwargs)

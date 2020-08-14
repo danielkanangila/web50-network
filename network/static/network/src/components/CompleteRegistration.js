@@ -50,7 +50,7 @@ const CompleteRegistration = ({ redirectTo = "/" }) => {
           first_name: auth.user.first_name || "",
           last_name: auth.user.first_name || "",
           bio: auth.user.bio || "",
-          avatar: null,
+          avatar: auth.user.avatar || "",
         }}
         validationSchema={validationSchema}
         onSubmit={completeRegistration}

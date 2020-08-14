@@ -7,10 +7,10 @@ const useAuth = () => {
 
   const logout = () => localStorage.removeItem("user");
 
-  const refresh = (user) => {
+  const refresh = (freshUser) => {
     setUser({
       ...user,
-      user,
+      user: freshUser,
     });
   };
 

@@ -35,4 +35,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name',
-                  'last_name', 'email', 'bio')
+                  'last_name', 'email', 'bio', 'avatar', 'date_joined')
+        extra_kwargs = {'date_joined': {'read_only': True}}
+
+    def update(self, *args, **kwargs):
+        if self.instance.avatar:
+            self.instance.avatar.delete()
+        return super().update(*args, **kwargs)

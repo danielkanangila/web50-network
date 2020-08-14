@@ -56,7 +56,7 @@ const ImagePicker = ({
         <div className={image ? "drop-image-preview" : "display-none"}>
           <img
             className={image ? "show-image" : "display-none"}
-            src={image?.asBase64}
+            src={image?.asBase64 || image}
             alt="profile"
           />
         </div>
