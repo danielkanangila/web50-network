@@ -1,6 +1,6 @@
 import React from "react";
 import * as Yup from "yup";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { Form, FormTextField, SubmitButton } from "./form";
 import useApi from "../hooks/useApi";
@@ -20,9 +20,8 @@ const validationSchema = Yup.object().shape({
 const Register = () => {
   const registerApi = useApi(authApi.register);
   const auth = useAuth();
-  const history = useHistory();
 
-  const register = async (data, { setStatus, resetForm }) => {
+  const register = async (data, { setStatus }) => {
     const response = await registerApi.request(
       data.email,
       data.email,
@@ -30,7 +29,7 @@ const Register = () => {
     );
     handleBackendFeedback(response, setStatus, (data) => {
       auth.login(response.data);
-      history.push("/complete-registration");
+      window.location = "/complete-registration";
     });
   };
 

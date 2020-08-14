@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     "Invalid file type. Allowed mine types [image/jpeg, image/png]",
     (value) => {
       const validType = ["image/jpeg", "image/png"];
-      if (value.file) return validType.includes(value.file[0].type);
+      if (value && value.file) return validType.includes(value.file[0].type);
       return true;
     }
   ),

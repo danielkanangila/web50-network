@@ -20,8 +20,7 @@ export const transformBackendErrors = (errors) => {
 export const handleBackendFeedback = (response, setStatus, successCallback) => {
   switch (response.status) {
     case 200:
-      successCallback(response.data);
-      break;
+      return successCallback(response.data);
     case 400:
       const errors = transformBackendErrors(response.data);
       console.log(response);
