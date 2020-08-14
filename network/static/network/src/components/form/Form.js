@@ -24,7 +24,6 @@ const Form = ({
     const alert = document.createElement("div");
     alert.classList.add("alert", "alert-danger");
     alert.innerText = error;
-    //formRef.current.firstElementChild
     formRef.current.insertBefore(
       alert,
       formRef.current.firstElementChild.nextSibling
@@ -52,7 +51,7 @@ const Form = ({
 const Error = ({ cb, status }) => {
   useEffect(() => {
     cb(status);
-  }, []);
+  }, [cb, status]);
   return <></>;
 };
 

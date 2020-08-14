@@ -34,8 +34,14 @@ const CompleteRegistration = ({ redirectTo = "/" }) => {
   const btnTitle = auth.user.first_name ? "Update" : "Complete Registration";
 
   const completeRegistration = async (data, { setStatus }) => {
-    const response = await updateApi.request(data);
-    handleBackendFeedback(response, setStatus, () => history.push(redirectTo));
+    const response = await updateApi.request({
+      ...data,
+      username: auth.user.username,
+    });
+    handleBackendFeedback(response, setStatus, (user) => {
+      auth.refresh(user);
+      history.push(redirectTo);
+    });
   };
   return (
     <div>

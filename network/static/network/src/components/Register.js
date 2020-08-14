@@ -6,7 +6,7 @@ import { Form, FormTextField } from "./form";
 import useApi from "../hooks/useApi";
 import authApi from "../api/auth";
 import useAuth from "../hooks/useAuth";
-import { transformBackendErrors, handleBackendFeedback } from "../utils";
+import { handleBackendFeedback } from "../utils";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),

@@ -3,7 +3,7 @@ import client, { getAuthToken } from "./client";
 const authToken = getAuthToken();
 
 const update = (data) =>
-  client.put("/auth/login", data, {
+  client.put("/auth/user", data, {
     headers: {
       Authorization: `Token ${authToken}`,
     },

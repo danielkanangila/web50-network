@@ -7,7 +7,14 @@ const useAuth = () => {
 
   const logout = () => localStorage.removeItem("user");
 
-  return { ...user, login, logout };
+  const refresh = (user) => {
+    setUser({
+      ...user,
+      user,
+    });
+  };
+
+  return { ...user, login, logout, refresh };
 };
 
 export default useAuth;

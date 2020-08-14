@@ -24,10 +24,13 @@ export const handleBackendFeedback = (response, setStatus, successCallback) => {
       break;
     case 400:
       const errors = transformBackendErrors(response.data);
+      console.log(response);
       return setStatus(errors);
     case 500:
+      console.log(response);
       return setStatus({ details: "An unknown error occurred." });
     default:
       console.log(response);
+      setStatus({ details: "Something went wrong." });
   }
 };
