@@ -20,9 +20,13 @@ const Form = ({
   };
 
   const appendStatusAsHTML = (status) => {
+    if (document.querySelector("#feedbackStatus")) {
+      document.querySelector("#feedbackStatus").remove();
+    }
     const error = parseStatus(status);
     const alert = document.createElement("div");
     alert.classList.add("alert", "alert-danger");
+    alert.setAttribute("id", "feedbackStatus");
     alert.innerText = error;
     formRef.current.insertBefore(
       alert,

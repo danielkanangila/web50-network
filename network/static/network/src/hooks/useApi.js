@@ -15,6 +15,7 @@ const useApi = (apiFunc) => {
       setLoading(false);
     } catch (error) {
       setErrors(true);
+      setLoading(false);
       response = error.response;
     }
 

@@ -2,7 +2,7 @@ import React from "react";
 import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
 
-import { Form, FormTextField } from "./form";
+import { Form, FormTextField, SubmitButton } from "./form";
 import { default as authApi } from "./../api/auth";
 import useAuth from "./../hooks/useAuth";
 import useApi from "./../hooks/useApi";
@@ -48,9 +48,7 @@ const Login = () => {
         label="Password"
         placeholder="********"
       />
-      <button className="btn btn-primary" type="submit">
-        Login
-      </button>
+      <SubmitButton title="Login" loading={loginApi.loading} />
       <p className="mt-2">
         Don't have an account? <Link to="/register">Register here.</Link>
       </p>
