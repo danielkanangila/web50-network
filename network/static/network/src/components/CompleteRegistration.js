@@ -7,7 +7,7 @@ import FormImagePicker from "./form/FormImagePicker";
 import useApi from "../hooks/useApi";
 import { default as userApi } from "./../api/user";
 import useAuth from "../hooks/useAuth";
-import { transformBackendErrors } from "../utils";
+import { handleBackendFeedback } from "../utils";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required().min(2).label("First Name"),
@@ -35,15 +35,7 @@ const CompleteRegistration = ({ redirectTo = "/" }) => {
 
   const completeRegistration = async (data, { setStatus }) => {
     const response = await updateApi.request(data);
-    switch (response.status) {
-      case 200:
-        history.push(redirectTo);
-      case 400:
-        const errors = transformBackendErrors(response.data);
-        return setStatus(errors);
-      case 500:
-        return setStatus({ details: "An unknown error occurred." });
-    }
+    handleBackendFeedback(response, setStatus, () => history.push(redirectTo));
   };
   return (
     <div>

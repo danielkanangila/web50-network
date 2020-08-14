@@ -8,6 +8,16 @@ const Form = ({
   children,
   ...otherProps
 }) => {
+  const parseStatus = (status) => {
+    if (status) {
+      if (status.non_field_errors || status.details) {
+        const error = status.non_field_errors || status.details;
+        return error;
+      }
+    }
+    return null;
+  };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -16,8 +26,8 @@ const Form = ({
     >
       {({ handleSubmit, status }) => (
         <form onSubmit={handleSubmit} {...otherProps}>
-          {status?.details && (
-            <div className="alert alert-danger">{status}</div>
+          {parseStatus(status) && (
+            <div className="alert alert-danger">{parseStatus(status)}</div>
           )}
           {children}
         </form>
