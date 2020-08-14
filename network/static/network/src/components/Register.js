@@ -6,7 +6,7 @@ import { Form, FormTextField } from "./form";
 import useApi from "../hooks/useApi";
 import authApi from "../api/auth";
 import useAuth from "../hooks/useAuth";
-import { transformBackendErrors } from "../utils";
+import { transformBackendErrors, handleBackendFeedback } from "../utils";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -28,14 +28,10 @@ const Register = () => {
       data.email,
       data.password
     );
-    if (response.status === 400) {
-      const errors = transformBackendErrors(response.data);
-      return setStatus(errors);
-    }
-    if (response.status === 200) {
+    handleBackendFeedback(response, setStatus, (data) => {
       auth.login(response.data);
       history.push("/complete-registration");
-    }
+    });
   };
 
   return (
