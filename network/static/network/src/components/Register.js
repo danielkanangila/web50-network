@@ -2,7 +2,7 @@ import React from "react";
 import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
 
-import { Form, FormTextField } from "./form";
+import { Form, FormTextField, SubmitButton } from "./form";
 import useApi from "../hooks/useApi";
 import authApi from "../api/auth";
 import useAuth from "../hooks/useAuth";
@@ -65,9 +65,7 @@ const Register = () => {
         label="Confirm Password"
         placeholder="********"
       />
-      <button className="btn btn-primary" type="submit">
-        Next
-      </button>
+      <SubmitButton title="next" loading={registerApi.loading} />
       <p className="mt-2">
         Already have an account? <Link to="/login">Log In here.</Link>
       </p>

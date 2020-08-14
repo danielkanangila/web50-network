@@ -10,7 +10,6 @@ const useApi = (apiFunc) => {
     try {
       setLoading(true);
       response = await apiFunc(...args);
-      console.log(response);
       setData(response.data);
       setLoading(false);
     } catch (error) {

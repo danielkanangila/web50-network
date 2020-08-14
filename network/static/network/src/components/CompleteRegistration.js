@@ -2,7 +2,7 @@ import React from "react";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
 
-import { Form, FormTextField } from "./form";
+import { Form, FormTextField, SubmitButton } from "./form";
 import FormImagePicker from "./form/FormImagePicker";
 import useApi from "../hooks/useApi";
 import { default as userApi } from "./../api/user";
@@ -18,8 +18,8 @@ const validationSchema = Yup.object().shape({
     "Invalid file type. Allowed mine types [image/jpeg, image/png]",
     (value) => {
       const validType = ["image/jpeg", "image/png"];
-      if (!value) return true;
-      return validType.includes(value.file[0].type);
+      if (value.file) return validType.includes(value.file[0].type);
+      return true;
     }
   ),
 });
@@ -85,10 +85,7 @@ const CompleteRegistration = ({ redirectTo = "/" }) => {
           height="160px"
         />
         <div className="mt-3"></div>
-
-        <button className="btn btn-primary" type="submit">
-          {btnTitle}
-        </button>
+        <SubmitButton title={btnTitle} loading={updateApi.loading} />
       </Form>
     </div>
   );

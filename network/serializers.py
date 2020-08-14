@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
                   'last_name', 'email', 'bio', 'avatar', 'date_joined')
         extra_kwargs = {'date_joined': {'read_only': True}}
 
-    def update(self, *args, **kwargs):
-        if self.instance.avatar:
+    def update(self, request, *args, **kwargs):
+        if self.instance.avatar and "avatar" in args[0]:
             self.instance.avatar.delete()
-        return super().update(*args, **kwargs)
+        return super().update(request, *args, **kwargs)
