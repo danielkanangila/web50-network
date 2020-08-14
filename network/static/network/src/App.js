@@ -1,9 +1,11 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
+
 import Register from "./components/Register";
 import Login from "./components/Login";
 import CompleteRegistration from "./components/CompleteRegistration";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Route from "./components/Route";
 import Main from "./components/Main";
 import Logout from "./components/Logout";
 

@@ -1,16 +1,18 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route as BrowserRoute, useHistory } from "react-router-dom";
 
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const Route = ({ component: Component, ...restOfProps }) => {
   const [user] = useLocalStorage("user", null);
+  const history = useHistory();
+
   return (
-    <Route
+    <BrowserRoute
       {...restOfProps}
       render={(props) => {
-        if (user) {
-          return <Redirect to="/" />;
+        if (user && user.token) {
+          return history.goBack();
         }
         return <Component {...props} />;
       }}
