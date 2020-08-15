@@ -51,10 +51,10 @@ class PostMediaSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    owner = UserSerializer(read_only=True)
+    owner_detail = UserSerializer(source="owner", read_only=True)
     medias = PostMediaSerializer(many=True, read_only=True)
 
     class Meta:
-        model: Post
-        fields: ('id', 'owner', 'content', 'like_count',
-                 'unlike_count', 'created_at')
+        model = Post
+        fields = ('id', 'owner', 'owner_detail', 'content', 'like_count',
+                  'unlike_count', 'medias', 'created_at')
