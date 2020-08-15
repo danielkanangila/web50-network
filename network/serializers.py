@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
-from .models import User
+from .models import (User, Post, PostMedia)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -42,3 +42,19 @@ class UserSerializer(serializers.ModelSerializer):
         if self.instance.avatar and "avatar" in args[0]:
             self.instance.avatar.delete()
         return super().update(request, *args, **kwargs)
+
+
+class PostMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostMedia
+        fields = "__all__"
+
+
+class PostSerializer(serializers.ModelSerializer):
+    owner = UserSerializer(read_only=True)
+    medias = PostMediaSerializer(many=True)
+
+    class Meta:
+        model: Post
+        fields: ('id', 'owner', 'content', 'like_count',
+                 'unlike_count', 'created_at')
