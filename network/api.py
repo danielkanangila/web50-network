@@ -1,6 +1,6 @@
 from django.http import Http404
-from django.shortcuts import get_list_or_404
-from rest_framework import viewsets, permissions
+from django.shortcuts import get_list_or_404, get_object_or_404
+from rest_framework import viewsets, permissions, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -41,11 +41,21 @@ class UserPostsAPIView(APIView):
         })
 
 
-class PostMediaViewSet(viewsets.ModelViewSet):
+class PostMediaAPIView(generics.CreateAPIView, generics.DestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
         HasPermission
     ]
-    queryset = PostMedia.objects.all()
     serializer_class = PostMediaSerializer
     parser_classes = [FormParser, MultiPartParser]
+
+    def create(self, request, post_id):
+        post = get_object_or_404(Post, pk=post_id, owner=request.user)
+        data = request.data
+        data["post"] = post_id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        medias = serializer.save()
+        return Response({
+            "post_medias": PostMediaSerializer(medias).data
+        })

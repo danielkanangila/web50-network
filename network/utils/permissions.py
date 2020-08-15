@@ -5,17 +5,20 @@ from ..models import Post
 
 
 class HasPermission(permissions.BasePermission):
+    message = "You do not have permission to perform this action. Invalid owner id"
+
     def has_permission(self, request, view):
         model = view.serializer_class.Meta.model
         model_name = ContentType.objects.get_for_model(model).model
 
         if model_name == "post":
-            return self.check_posts_permission(request, view)
+            return self.check_posts_permissions(request, view)
+        if model_name == "postmedia":
+            return self.check_postmedias_permissions(request, view)
         return False
 
-    def check_posts_permission(self, request, view):
+    def check_posts_permissions(self, request, view):
         auth_user = request.user
-        self.message = "You do not have permission to perform this action. Incorrect owner id"
 
         if request.method == "POST" and auth_user.id != request.data["owner"]:
             return False
@@ -29,4 +32,11 @@ class HasPermission(permissions.BasePermission):
                 pk=view.kwargs.get("pk"), owner=auth_user)
             if not post:
                 return False
+        return True
+
+    def check_postmedias_permissions(self, request, view):
+        post = Post.objects.filter(
+            pk=view.kwargs.get("post_id"), owner=request.user)
+        if not post:
+            return False
         return True

@@ -14,7 +14,7 @@ from .auth import (
 router = routers.DefaultRouter()
 
 router.register("api/posts", api.PostViewSet, 'posts')
-router.register("api/post_medias", api.PostMediaViewSet, 'post_media')
+#router.register("api/post_medias", api.PostMediaViewSet, 'post_media')
 
 urlpatterns = [
     path('auth', include('knox.urls')),
@@ -27,5 +27,7 @@ urlpatterns = [
     path("api/auth/logout", knox_views.LogoutView.as_view(), name="auth_logout"),
     path("api/auth/user", UserAPI.as_view(), name="auth_user"),
     path("api/user/<int:user_id>/posts",
-         api.UserPostsAPIView.as_view(), name="user_posts")
+         api.UserPostsAPIView.as_view(), name="user_posts"),
+    path("api/posts/<int:post_id>/medias",
+         api.PostMediaAPIView.as_view(), name="post_medias")
 ] + router.urls
