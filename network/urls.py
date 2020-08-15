@@ -2,6 +2,7 @@
 from django.urls import path, include
 from knox import views as knox_views
 
+from . import api
 from . import views
 from .auth import (
     RegisterAPI,
@@ -19,4 +20,6 @@ urlpatterns = [
     path("api/auth/login", LoginAPI.as_view(), name="auth_login"),
     path("api/auth/logout", knox_views.LogoutView.as_view(), name="auth_logout"),
     path("api/auth/user", UserAPI.as_view(), name="auth_user"),
+    path("api/post", api.PostViewSet, name="post"),
+    path("api/post_media", api.PostMediaViewSet, name="post_media"),
 ]

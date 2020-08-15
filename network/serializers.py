@@ -52,7 +52,7 @@ class PostMediaSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
-    medias = PostMediaSerializer(many=True)
+    medias = PostMediaSerializer(many=True, read_only=True)
 
     class Meta:
         model: Post
