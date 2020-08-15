@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404
 from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -27,14 +27,18 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class UserPostsAPIView(APIView):
-    permissions = [
+    permission_classes = [
         permissions.IsAuthenticated,
         HasPermission
     ]
+    serializer_class = PostSerializer
 
     def get(self, request, user_id):
-        print(user_id)
-        return Response({"ok": True})
+        post = get_list_or_404(Post, owner=user_id)
+
+        return Response({
+            "post": PostSerializer(post, many=True).data
+        })
 
 
 class PostMediaViewSet(viewsets.ModelViewSet):

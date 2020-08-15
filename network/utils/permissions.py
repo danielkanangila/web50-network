@@ -8,6 +8,7 @@ class HasPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         model = view.serializer_class.Meta.model
         model_name = ContentType.objects.get_for_model(model).model
+
         if model_name == "post":
             return self.check_posts_permission(request, view)
         return False
