@@ -1,7 +1,7 @@
 from rest_framework import permissions
 from django.contrib.contenttypes.models import ContentType
 
-from ..models import Post
+from ..models import Post, Comment
 
 
 class HasPermission(permissions.BasePermission):
@@ -15,6 +15,8 @@ class HasPermission(permissions.BasePermission):
             return self.check_posts_permissions(request, view)
         if model_name == "postmedia":
             return self.check_postmedias_permissions(request, view)
+        if model_name == "comment":
+            return self.check_comments_permissions(request, view)
         return False
 
     def check_posts_permissions(self, request, view):
@@ -39,4 +41,19 @@ class HasPermission(permissions.BasePermission):
             pk=view.kwargs.get("post_id"), owner=request.user)
         if not post:
             return False
+        return True
+
+    def check_comments_permissions(self, request, view):
+        self.message = "You do not have permission to perform this action. Invalid owner id or Resource not found."
+        post = Post.objects.filter(pk=view.kwargs.get("post_id"))
+        if not post:
+            return False
+        if request.method == "DELETE":
+            comment = Comment.objects.filter(
+                pk=view.kwargs.get("pk"),
+                post=view.kwargs.get("post_id"),
+                owner=request.user.pk
+            )
+            if not comment:
+                return False
         return True

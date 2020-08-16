@@ -8,7 +8,7 @@ from . import views
 from .auth import (
     RegisterAPI,
     LoginAPI,
-    UserAPI
+    UserAPI,
 )
 
 router = routers.DefaultRouter()
@@ -29,5 +29,9 @@ urlpatterns = [
     path("api/user/<int:user_id>/posts",
          api.UserPostsAPIView.as_view(), name="user_posts"),
     path("api/posts/<int:post_id>/medias",
-         api.PostMediaAPIView.as_view(), name="post_medias")
+         api.PostMediaAPIView.as_view(), name="post_medias"),
+    path("api/posts/<int:post_id>/comments",
+         api.CommentAPIView.as_view(), name="post_comments"),
+    path("api/posts/<int:post_id>/comments/<int:pk>",
+         api.CommentAPIView.as_view(), name="post_comments"),
 ] + router.urls

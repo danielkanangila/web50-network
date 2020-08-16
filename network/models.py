@@ -33,13 +33,16 @@ class Post(models.Model):
 
 
 class PostMedia(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="medias")
     media = models.FileField(upload_to=upload_to)
     media_type = models.CharField(max_length=50)
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
     like_count = models.IntegerField(blank=True, default=0)
     unlike_count = models.IntegerField(blank=True, default=0)

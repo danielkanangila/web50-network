@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
-from .models import (User, Post, PostMedia)
+from .models import (User, Post, PostMedia, Comment)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -44,6 +44,15 @@ class UserSerializer(serializers.ModelSerializer):
         return super().update(request, *args, **kwargs)
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    owner_detail = UserSerializer(source="owner", read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ("id", "owner", "owner_detail", "post", "content", "like_count",
+                  "unlike_count", "created_at")
+
+
 class PostMediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostMedia
@@ -53,8 +62,9 @@ class PostMediaSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     owner_detail = UserSerializer(source="owner", read_only=True)
     medias = PostMediaSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Post
         fields = ('id', 'owner', 'owner_detail', 'content', 'like_count',
-                  'unlike_count', 'medias', 'created_at')
+                  'unlike_count', 'comments', 'medias', 'created_at')
