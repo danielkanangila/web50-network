@@ -17,6 +17,8 @@ class HasPermission(permissions.BasePermission):
             return self.check_postmedias_permissions(request, view)
         if model_name == "comment":
             return self.check_comments_permissions(request, view)
+        if model_name == "user_followers":
+            return self.check_user_followers_permissions(request, view)
         return False
 
     def check_posts_permissions(self, request, view):
@@ -56,4 +58,11 @@ class HasPermission(permissions.BasePermission):
             )
             if not comment:
                 return False
+        return True
+
+    def check_user_followers_permissions(self, request, view):
+        self.message = "Unauthorized Action."
+
+        if request.user.pk != view.kwargs.get("user_id"):
+            return False
         return True

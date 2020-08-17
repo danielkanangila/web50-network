@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404
-from rest_framework import viewsets, permissions, generics, status
+from rest_framework import viewsets, permissions, generics, status, serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -9,13 +9,18 @@ from .utils.permissions import HasPermission
 from .models import (
     PostMedia,
     Post,
-    Comment
+    Comment,
+    User_Followers,
+    User
 )
 
 from .serializers import (
     PostMediaSerializer,
     PostSerializer,
-    CommentSerializer
+    CommentSerializer,
+    UserFollowerSerializer,
+    FollowerFollowingSerializer,
+    FollowerDetailSerializer,
 )
 
 
@@ -87,4 +92,41 @@ class CommentAPIView(generics.CreateAPIView, generics.DestroyAPIView):
             post=kwargs.get("post_id")
         )
         comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENTr)
+
+
+class UserFollowerAPIView(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated,
+        HasPermission,
+    ]
+
+    serializer_class = UserFollowerSerializer
+
+    def get(self, request, *args, **kwargs):
+        user_followers = User_Followers.objects.all()
+        following = user_followers.filter(user=request.user)
+        followers = user_followers.filter(follower=request.user)
+        serializer = FollowerFollowingSerializer({
+            "followers": followers,
+            "following": following
+        })
+
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        data["user"] = kwargs.get("user_id")
+        serializer = UserFollowerSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        user_follower = serializer.save()
+        return Response({
+            "follower": UserFollowerSerializer(user_follower).data
+        })
+
+    def delete(self, request, *args, **kwargs):
+        user_follower = get_object_or_404(
+            User_Followers, pk=kwargs.get("pk"), user=request.user)
+        user_follower.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
