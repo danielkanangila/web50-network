@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
+from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
 from .models import (User, Post, PostMedia, Comment, User_Followers)
 
@@ -8,7 +9,15 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'email': {
+                'required': True,
+                'validators': [
+                    UniqueValidator(queryset=User.objects.all())
+                ]
+            }
+        }
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -77,21 +86,17 @@ class UserFollowerSerializer(serializers.ModelSerializer):
         if attrs["user"] == attrs["follower"]:
             raise serializers.ValidationError(
                 "Follower ID should  be different with the authenticated user ID.")
-        if self.is_follower(attrs["user"], attrs["follower"]) is not None:
-            raise serializers.ValidationError("You can follow user only once.")
         return attrs
-
-    def is_follower(self, user, follower):
-        try:
-            user_follower = User_Followers.objects.get(
-                user=user, follower=follower)
-            return user_follower
-        except User_Followers.DoesNotExist:
-            return None
 
     class Meta:
         model = User_Followers
         fields = ('id', 'user', 'follower', 'follower_detail')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=User_Followers.objects.all(),
+                fields=['user', 'follower']
+            )
+        ]
 
 
 class FollowerDetailSerializer(serializers.ModelSerializer):
@@ -117,5 +122,7 @@ class FollowingSerializer(serializers.ModelSerializer):
 
 
 class FollowerFollowingSerializer(serializers.Serializer):
+    followers_count = serializers.IntegerField()
+    following_count = serializers.IntegerField()
     followers = FollowerSerializer(many=True)
     following = FollowingSerializer(many=True)

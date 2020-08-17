@@ -109,7 +109,9 @@ class UserFollowerAPIView(APIView):
         followers = user_followers.filter(follower=request.user)
         serializer = FollowerFollowingSerializer({
             "followers": followers,
-            "following": following
+            "following": following,
+            "followers_count": len(followers),
+            "following_count": len(following)
         })
 
         return Response(serializer.data)
