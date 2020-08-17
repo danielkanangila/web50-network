@@ -2,7 +2,7 @@ import React from "react";
 import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
 
-import { Form, FormTextField, SubmitButton } from "./form";
+import { Form, FormTextField, FormCheckbox, SubmitButton } from "./form";
 import { default as authApi } from "./../api/auth";
 import useAuth from "./../hooks/useAuth";
 import useApi from "./../hooks/useApi";
@@ -30,7 +30,7 @@ const Login = () => {
   };
   return (
     <Form
-      initialValues={{ email: "", password: "" }}
+      initialValues={{ email: "", password: "", remember_me: false }}
       onSubmit={login}
       validationSchema={validationSchema}
       className="card auth-card"
@@ -48,6 +48,8 @@ const Login = () => {
         label="Password"
         placeholder="********"
       />
+      <FormCheckbox label="Remember Me" name="remember_me" />
+      <div className="mt-3"></div>
       <SubmitButton title="Login" loading={loginApi.loading} />
       <p className="mt-2">
         Don't have an account? <Link to="/register">Register here.</Link>

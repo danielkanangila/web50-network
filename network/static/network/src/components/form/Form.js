@@ -6,6 +6,7 @@ const Form = ({
   onSubmit,
   validationSchema,
   children,
+  className,
   ...otherProps
 }) => {
   const formRef = useRef(null);
@@ -41,7 +42,12 @@ const Form = ({
       validationSchema={validationSchema}
     >
       {({ handleSubmit, status }) => (
-        <form ref={formRef} onSubmit={handleSubmit} {...otherProps}>
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className={`${className} shadow-sm rounded`}
+          {...otherProps}
+        >
           {hasNonFieldStatus(status) && (
             <Error cb={appendStatusAsHTML} status={status} />
           )}
