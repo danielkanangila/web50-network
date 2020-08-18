@@ -1,6 +1,10 @@
 @import "./styles/bootstrap/bootstrap.scss";
 @import "./styles/logo.scss";
 
+* {
+  color: $gray-700;
+}
+
 .app-bar {
   height: 60px;
   border-bottom: 1px solid $gray-300;
@@ -40,28 +44,61 @@
   left: calc(50% - 50px);
 }
 
-.sidebar-left {
-  height: 100vh;
-  border-right: 1px solid $gray-300;
-  display: none;
-  @include media-breakpoint-up(sm) {
-    display: block;
-    @include make-col(4);
+.sidebar {
+  &-left {
+    height: 100vh;
+    border-right: 1px solid $gray-300;
+    display: none;
+    @include media-breakpoint-up(sm) {
+      display: block;
+      @include make-col(4);
+    }
+    @include media-breakpoint-up(lg) {
+      display: block;
+      @include make-col(3);
+    }
   }
-  @include media-breakpoint-up(lg) {
-    display: block;
-    @include make-col(3);
+
+  &-right {
+    height: 100vh;
+    border-left: 1px solid $gray-300;
+    display: none;
+    @include media-breakpoint-up(lg) {
+      display: block;
+      @include make-col(3);
+    }
+  }
+  &-header {
+    height: 65px;
+  }
+  .logo {
+    top: 35px;
+    left: 15px;
+  }
+  &-nav {
+    display: flex;
+    flex-direction: column;
+
+    &--item {
+      display: flex;
+      align-items: center;
+      padding: 10px 35px;
+      color: inherit;
+      font-weight: $font-weight-bold;
+      transition: 0.3s;
+      &:hover,
+      .active {
+        text-decoration: none;
+        background-color: $primary;
+        color: #fff;
+        span {
+          color: #fff;
+        }
+      }
+    }
   }
 }
-.sidebar-right {
-  height: 100vh;
-  border-left: 1px solid $gray-300;
-  display: none;
-  @include media-breakpoint-up(lg) {
-    display: block;
-    @include make-col(3);
-  }
-}
+
 .center-content {
   @include make-col(12);
   @include media-breakpoint-up(sm) {
