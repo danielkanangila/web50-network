@@ -1,9 +1,17 @@
 import React from "react";
+import AppBar from "../AppBar";
 
 const Main = () => {
   return (
-    <div>
-      <h1>Main</h1>
+    <div className="container-responsive">
+      <div className="row">
+        <div className="sidebar-left fixed"></div>
+        <div className="center-content">
+          <AppBar title="Home" subTitle="" />
+          <div className="center-content--body"></div>
+        </div>
+        <div className="sidebar-right fixed"></div>
+      </div>
     </div>
   );
 };
