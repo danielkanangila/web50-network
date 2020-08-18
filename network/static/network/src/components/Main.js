@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import AppBar from "../AppBar";
 import Logo from "./Logo";
@@ -13,18 +13,18 @@ const Main = () => {
             <Logo />
           </div>
           <div className="sidebar-nav mt-3">
-            <Link className="sidebar-nav--item" to="/">
+            <NavLink className="sidebar-nav--item" to="/">
               <span class="material-icons mr-2">home</span>
               Home
-            </Link>
-            <Link className="sidebar-nav--item" to="/friends">
-              <span class="material-icons mr-2">person</span>
-              Friends
-            </Link>
-            <Link className="sidebar-nav--item" to="/profile">
+            </NavLink>
+            <NavLink className="sidebar-nav--item" to="/friends">
               <span class="material-icons mr-2">people</span>
+              Friends
+            </NavLink>
+            <NavLink className="sidebar-nav--item" to="/profile">
+              <span class="material-icons mr-2">person</span>
               Profile
-            </Link>
+            </NavLink>
           </div>
         </div>
         <div className="center-content">
