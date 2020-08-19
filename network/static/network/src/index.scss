@@ -41,7 +41,7 @@
 .logo-wrapper {
   position: absolute;
   top: -70px;
-  left: calc(50% - 50px);
+  left: calc(50% - 35px);
 }
 
 .sidebar {
@@ -73,8 +73,7 @@
     height: 65px;
   }
   .logo {
-    top: 20px;
-    left: 15px;
+    left: 30px;
   }
   &-nav {
     display: flex;
@@ -91,11 +90,8 @@
       border-radius: 25px;
       &:hover {
         text-decoration: none;
-        background-color: $primary;
-        color: #fff;
-        span {
-          color: #fff;
-        }
+        background-color: $gray-200;
+        color: inherit;
       }
     }
   }

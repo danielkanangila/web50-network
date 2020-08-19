@@ -17,13 +17,17 @@ const Main = () => {
               <span class="material-icons mr-2">home</span>
               Home
             </NavLink>
-            <NavLink className="sidebar-nav--item" to="/friends">
+            <NavLink className="sidebar-nav--item" to="/peoples ">
               <span class="material-icons mr-2">people</span>
-              Friends
+              People
             </NavLink>
             <NavLink className="sidebar-nav--item" to="/profile">
               <span class="material-icons mr-2">person</span>
               Profile
+            </NavLink>
+            <NavLink className="sidebar-nav--item" to="/profile">
+              <span class="material-icons mr-2">settings</span>
+              Settings
             </NavLink>
           </div>
         </div>
