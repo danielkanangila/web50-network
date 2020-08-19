@@ -9,7 +9,7 @@ const SidebarLeft = () => {
         <Logo />
       </div>
       <div className="sidebar-nav mt-3">
-        <NavLink className="sidebar-nav--item" to="/">
+        <NavLink exact className="sidebar-nav--item" to="/">
           <span className="material-icons mr-3">home</span>
           Home
         </NavLink>
