@@ -1,7 +1,7 @@
 import React from "react";
 
 const SidebarRight = () => {
-  return <div></div>;
+  return <div className="sidebar sidebar-right fixed"></div>;
 };
 
 export default SidebarRight;

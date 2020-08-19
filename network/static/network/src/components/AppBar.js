@@ -2,7 +2,7 @@ import React from "react";
 // import { Link } from "react-router-dom";
 // import Logo from "./components/Logo";
 
-const AppBar = () => {
+const AppBar = ({ title, subTitle }) => {
   //   const [isLogoVisible, setIsLogoVisible] = useState(false);
 
   //   useEffect(() => {
@@ -19,7 +19,7 @@ const AppBar = () => {
           <Logo />
         </Link>
       )} */}
-      <h2 className="title">Home</h2>
+      <h2 className="title">{title}</h2>
     </div>
   );
 };

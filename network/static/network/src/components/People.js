@@ -1,7 +1,8 @@
 import React from "react";
+import Layout from "./Layout";
 
 const People = () => {
-  return <div></div>;
+  return <Layout appBar={{ title: "People" }}></Layout>;
 };
 
 export default People;
