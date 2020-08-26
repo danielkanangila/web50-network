@@ -1,8 +1,41 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
+
 import Layout from "./Layout";
+import Editor from "./Editor";
+import useApi from "../hooks/useApi";
+import postApi from "../api/post";
+import PostCard from "./PostCard";
 
 const Home = () => {
-  return <Layout appBar={{ title: "Home" }}></Layout>;
+  const getPostsApi = useApi(postApi.getAll);
+
+  const getAllPost = useCallback(async () => {
+    return await getPostsApi.request();
+  }, [getPostsApi]);
+
+  useEffect(() => {
+    getAllPost();
+  }, []);
+
+  return (
+    <Layout appBar={{ title: "Home" }}>
+      <div className="row">
+        <div className="col-1"></div>
+        <div className="col-11">
+          <Editor />
+        </div>
+        <hr />
+        <div className="list-unstyled ">
+          {getPostsApi.data?.map((post) => (
+            <React.Fragment key={post.id}>
+              <PostCard {...post} />
+              <div className="divider mb-1"></div>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </Layout>
+  );
 };
 
 export default Home;
