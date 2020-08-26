@@ -25,11 +25,11 @@ const Home = () => {
           <Editor />
         </div>
         <hr />
-        <div className="list-unstyled ">
+        <div className="list-unstyled w-100">
           {getPostsApi.data?.map((post) => (
             <React.Fragment key={post.id}>
               <PostCard {...post} />
-              <div className="divider mb-1"></div>
+              <div className="divider"></div>
             </React.Fragment>
           ))}
         </div>

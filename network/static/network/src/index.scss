@@ -137,6 +137,16 @@ hr {
   }
 }
 
+.post-card {
+  width: 100%;
+  display: flex;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    background-color: $gray-100;
+  }
+}
+
 .media {
   &-avatar {
     width: 64px;

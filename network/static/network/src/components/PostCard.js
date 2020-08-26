@@ -14,7 +14,7 @@ const PostCard = ({
   created_at,
 }) => {
   return (
-    <li className="media p-3">
+    <li className="post-card p-3 pt-4">
       <Avatar image_url={owner_detail.avatar} className="avatar mr-3" />
       <div className="media-body">
         <h6>
