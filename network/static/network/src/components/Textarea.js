@@ -3,7 +3,7 @@ import React, { useState, useRef } from "react";
 const Textarea = React.forwardRef(
   ({ value, setValue, defaultRows = 1, ...otherProps }, ref) => {
     const [rows, setRows] = useState(defaultRows);
-    const textareaRef = ref;
+    const textareaRef = ref || useRef();
 
     const handleChange = (e) => {
       // External handle change function

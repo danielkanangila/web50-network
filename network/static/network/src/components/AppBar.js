@@ -13,7 +13,7 @@ const AppBar = ({ title, subTitle }) => {
   //   }, []);
 
   return (
-    <div className="navbar navbar-expand-lg bg-white app-bar">
+    <div className="navbar navbar-expand-lg bg-white app-bar sticky-top">
       {/* {isLogoVisible && (
         <Link className="navbar-brand" to="/">
           <Logo />

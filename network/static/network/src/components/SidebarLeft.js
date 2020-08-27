@@ -4,7 +4,7 @@ import Logo from "./Logo";
 
 const SidebarLeft = () => {
   return (
-    <div className="sidebar sidebar-left fixed">
+    <div className="sidebar sidebar-left sticky-top">
       <div className="sidebar-header">
         <Logo />
       </div>
