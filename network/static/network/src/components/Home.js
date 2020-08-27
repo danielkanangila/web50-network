@@ -1,38 +1,32 @@
-import React, { useEffect, useCallback } from "react";
+import React from "react";
 
 import Layout from "./Layout";
 import Editor from "./Editor";
 import useApi from "../hooks/useApi";
 import postApi from "../api/post";
-import PostCard from "./PostCard";
+import Avatar from "./Avatar";
+import useAuth from "./../hooks/useAuth";
+import PostList from "./posts/PostList";
 
 const Home = () => {
-  const getPostsApi = useApi(postApi.getAll);
+  const savePost = useApi(postApi.createPost);
+  const auth = useAuth();
 
-  const getAllPost = useCallback(async () => {
-    return await getPostsApi.request();
-  }, [getPostsApi]);
-
-  useEffect(() => {
-    getAllPost();
-  }, []);
+  const createPost = (data) => {
+    console.log(data);
+  };
 
   return (
     <Layout appBar={{ title: "Home" }}>
-      <div className="row">
-        <div className="col-1"></div>
-        <div className="col-11">
-          <Editor />
+      <div className="home">
+        <div className="post-card home-header">
+          <Avatar image_url={auth.user.avatar} className="avatar mr-3" />
+          <div className="media-body">
+            <Editor onSubmit={createPost} />
+          </div>
         </div>
         <hr />
-        <div className="list-unstyled w-100">
-          {getPostsApi.data?.map((post) => (
-            <React.Fragment key={post.id}>
-              <PostCard {...post} />
-              <div className="divider"></div>
-            </React.Fragment>
-          ))}
-        </div>
+        <PostList />
       </div>
     </Layout>
   );

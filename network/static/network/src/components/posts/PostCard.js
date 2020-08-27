@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 
-import Avatar from "./Avatar";
+import Avatar from "../Avatar";
 
 const PostCard = ({
   id,
@@ -23,7 +23,7 @@ const PostCard = ({
             {moment(created_at, "YYYY-MM-DD hh:mm:ss").fromNow()}
           </small>
         </h6>
-        {content}
+        <div className="media-content">{content}</div>
         <div className="media-details mt-2">
           <div className="comments">
             <button className="btn-icon">

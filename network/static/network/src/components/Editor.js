@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Textarea from "./Textarea";
+import SubmitButton from "./form/SubmitButton";
 
-const Editor = ({ onSubmit, ...htmlAttributes }) => {
-  const [textValue, setTextValue] = useState("");
+const Editor = ({ defaultValue = "", onSubmit, ...htmlAttributes }) => {
+  const [textValue, setTextValue] = useState(defaultValue);
   return (
     <Wrapper {...htmlAttributes}>
       <Textarea
@@ -23,7 +24,11 @@ const Editor = ({ onSubmit, ...htmlAttributes }) => {
           </button> */}
         </div>
         <div className="right-group">
-          <button className="btn btn-primary btn-sm btn-rounded">Post</button>
+          <SubmitButton
+            onSubmit={() => onSubmit(textValue)}
+            className="btn btn-primary btn-sm btn-rounded"
+            title="Post"
+          />
         </div>
       </div>
     </Wrapper>

@@ -1,8 +1,17 @@
 import React from "react";
 
-const SubmitButton = ({ title, loading }) => {
+const SubmitButton = ({ className, onSubmit = null, title, loading }) => {
+  const handleSubmit = (e) => {
+    if (onSubmit) return onSubmit(e);
+    return true;
+  };
   return (
-    <button className="btn btn-primary" type="submit" disabled={loading}>
+    <button
+      className={`btn btn-primary ${className ? className : ""}`}
+      type="submit"
+      disabled={loading}
+      onClick={handleSubmit}
+    >
       {!loading && title}
       {loading && (
         <span
