@@ -3,37 +3,40 @@ import styled from "styled-components";
 import Textarea from "./Textarea";
 import SubmitButton from "./form/SubmitButton";
 
-const Editor = ({ defaultValue = "", onSubmit, ...htmlAttributes }) => {
-  const [textValue, setTextValue] = useState(defaultValue);
-  return (
-    <Wrapper {...htmlAttributes}>
-      <Textarea
-        defaultRows="1"
-        value={textValue}
-        setValue={setTextValue}
-        className="editor-textarea"
-        placeholder="What's  Up?"
-      />
-      <div className="editor-action--group">
-        <div className="left-group">
-          {/* <button className="btn-icon">
+const Editor = React.forwardRef(
+  ({ defaultValue = "", onSubmit, ...htmlAttributes }, ref) => {
+    const [textValue, setTextValue] = useState(defaultValue);
+    return (
+      <Wrapper {...htmlAttributes}>
+        <Textarea
+          defaultRows="1"
+          value={textValue}
+          setValue={setTextValue}
+          className="editor-textarea"
+          placeholder="What's  Up?"
+          ref={ref}
+        />
+        <div className="editor-action--group">
+          <div className="left-group">
+            {/* <button className="btn-icon">
             <span className="material-icons">insert_photo</span>
           </button>
           <button className="btn-icon">
             <span className="material-icons">insert_emoticon</span>
           </button> */}
+          </div>
+          <div className="right-group">
+            <SubmitButton
+              onSubmit={() => onSubmit(textValue)}
+              className="btn btn-primary btn-sm btn-rounded"
+              title="Post"
+            />
+          </div>
         </div>
-        <div className="right-group">
-          <SubmitButton
-            onSubmit={() => onSubmit(textValue)}
-            className="btn btn-primary btn-sm btn-rounded"
-            title="Post"
-          />
-        </div>
-      </div>
-    </Wrapper>
-  );
-};
+      </Wrapper>
+    );
+  }
+);
 
 const Wrapper = styled.div`
   width: 100%;
