@@ -24,6 +24,10 @@ class HasPermission(permissions.BasePermission):
     def check_posts_permissions(self, request, view):
         auth_user = request.user
 
+        if request.method == "POST" and not "owner" in request.data:
+            self.message = "No post owner key found"
+            return False
+
         if request.method == "POST" and auth_user.id != request.data["owner"]:
             return False
         if request.method == "PUT":

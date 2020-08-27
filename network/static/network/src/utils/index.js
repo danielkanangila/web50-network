@@ -33,3 +33,33 @@ export const handleBackendFeedback = (response, setStatus, successCallback) => {
       setStatus({ details: "Something went wrong." });
   }
 };
+
+export const request = async (apiFunc, ...args) => {
+  let response;
+  try {
+    response = await apiFunc(...args);
+    response.ok = true;
+  } catch (error) {
+    console.log(error);
+    response = error.response;
+    response.ok = false;
+  }
+  return response;
+};
+
+export const createAction = async (action, apiFunc, dispatch, ...args) => {
+  dispatch({ type: `${action}_START` });
+
+  const response = await request(apiFunc, ...args);
+
+  if (!response.ok)
+    return dispatch({
+      type: `${action}_FAILURE`,
+      payload: response,
+    });
+
+  return dispatch({
+    type: `${action}_SUCCESS`,
+    payload: response.data,
+  });
+};

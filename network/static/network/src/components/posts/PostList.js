@@ -1,20 +1,18 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-import useApi from "../../hooks/useApi";
-import postApi from "../../api/post";
 import Loader from "../Loader";
 import PostCard from "./PostCard";
+import actions from "../../store/actions";
 
 const PostList = () => {
-  const posts = useApi(postApi.getAll);
-
-  const getAllPost = useCallback(async () => {
-    return await posts.request();
-  }, [posts]);
+  const posts = useSelector((state) => state.posts);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getAllPost();
+    dispatch(actions.getAll());
   }, []);
+
   return (
     <React.Fragment>
       <Loader show={posts.loading} />
