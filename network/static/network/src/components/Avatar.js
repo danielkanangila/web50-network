@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const Avatar = ({ image_url, alt, className }) => {
+const Avatar = ({ image_url, alt, width = 64, height = 64, className }) => {
   return (
-    <Wrapper className={className}>
+    <Wrapper width={width} height={height} className={className}>
       <img
         src={image_url ? image_url : require("../media/profile_pic.png")}
         alt={alt}
@@ -13,8 +13,8 @@ const Avatar = ({ image_url, alt, className }) => {
 };
 
 const Wrapper = styled.div`
-  width: 64px;
-  height: 64px;
+  ${({ width, height }) => `width: ${width}px;
+  height: ${height}px;`}
   overflow: hidden;
   border-radius: 50%;
   img {
