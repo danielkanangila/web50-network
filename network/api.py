@@ -29,7 +29,7 @@ class PostViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticated,
         HasPermission
     ]
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by("-created_at")
     serializer_class = PostSerializer
 
 
@@ -41,7 +41,8 @@ class UserPostsAPIView(APIView):
     serializer_class = PostSerializer
 
     def get(self, request, user_id):
-        post = get_list_or_404(Post, owner=user_id)
+        post = get_list_or_404(Post.objects.order_by(
+            "-created_at").filter(owner=user_id))
 
         return Response(PostSerializer(post, many=True, context={'request': request}).data)
 
