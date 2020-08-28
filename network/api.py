@@ -103,15 +103,16 @@ class UserFollowerAPIView(APIView):
     serializer_class = UserFollowerSerializer
 
     def get(self, request, *args, **kwargs):
+        print(kwargs)
         user_followers = User_Followers.objects.all()
-        following = user_followers.filter(user=request.user)
-        followers = user_followers.filter(follower=request.user)
+        following = user_followers.filter(user=kwargs.get("user_id"))
+        followers = user_followers.filter(follower=kwargs.get("user_id"))
         serializer = FollowerFollowingSerializer({
             "followers": followers,
             "following": following,
             "followers_count": len(followers),
             "following_count": len(following)
-        })
+        }, context={"request": request})
 
         return Response(serializer.data)
 
@@ -122,7 +123,7 @@ class UserFollowerAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         user_follower = serializer.save()
         return Response({
-            "follower": UserFollowerSerializer(user_follower).data
+            "follower": UserFollowerSerializer(user_follower, context={"request": request}).data
         })
 
     def delete(self, request, *args, **kwargs):

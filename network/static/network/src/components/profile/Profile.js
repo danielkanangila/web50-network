@@ -14,13 +14,15 @@ import FriendList from "./FriendList";
 const Profile = () => {
   const auth = useAuth();
   const profileApi = useApi(userApi.getInfo);
-  const posts = useSelector((state) => state.posts);
+  const friendShip = useApi(userApi.getFollowers);
+  const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const { user_id } = useParams();
   const match = useRouteMatch();
 
   const getProfileInfo = async () => {
     await profileApi.request(user_id);
+    await friendShip.request(user_id);
   };
 
   useEffect(() => {
@@ -36,21 +38,28 @@ const Profile = () => {
           {...profileApi.data}
           auth_id={auth.user.id}
           request_id={user_id}
+          friends={friendShip.data}
+          followers_count={friendShip.data?.followers_count}
+          following_count={friendShip.data?.following_count}
         />
         <div className="divider"></div>
         <div className="profile-body post-list mt-3">
           <Route
             exact
             path={match.url}
-            render={() => <PostList posts={posts} />}
+            render={() => <PostList posts={state.posts} />}
           />
           <Route
             path={`${match.url}/following`}
-            render={() => <FriendList title="Following" />}
+            render={() => (
+              <FriendList title="Following" list={friendShip.data?.following} />
+            )}
           />
           <Route
             path={`${match.url}/followers`}
-            render={() => <FriendList title="Followers" />}
+            render={() => (
+              <FriendList title="Followers" list={friendShip.data?.followers} />
+            )}
           />
         </div>
       </div>

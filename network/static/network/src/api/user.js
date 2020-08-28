@@ -15,7 +15,10 @@ const update = (formData) => {
 
 const getInfo = (user_id) => client.get(`/auth/users/${user_id}`);
 
+const getFollowers = (user_id) => client.get(`/users/${user_id}/followers`);
+
 export default {
   update,
   getInfo,
+  getFollowers,
 };

@@ -109,9 +109,19 @@ class UserFollowerSerializer(serializers.ModelSerializer):
 
 
 class FollowerDetailSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'username', 'bio', 'avatar')
+        fields = ('id', 'first_name', 'last_name',
+                  'username', 'bio', 'avatar_url')
+
+    def get_avatar_url(self, user):
+        if not user.avatar:
+            return None
+        request = self.context.get("request")
+        avatar_url = user.avatar.url
+        return request.build_absolute_uri(avatar_url)
 
 
 class FollowerSerializer(serializers.ModelSerializer):

@@ -11,8 +11,19 @@ const Header = ({
   bio,
   request_id,
   loading,
+  friends,
 }) => {
   const match = useRouteMatch();
+  const isFollowed = () => {
+    if (friends && friends.following) {
+      const filteredFriends = friends?.following.filter(
+        (item) => item.detail.id === auth_id
+      );
+      if (filteredFriends.length) return true;
+    }
+    return false;
+  };
+  isFollowed();
   if (loading) return <Loader show={loading} />;
   return (
     <div className="profile-header">
@@ -28,7 +39,9 @@ const Header = ({
             {auth_id === parseInt(request_id) ? (
               <button className="btn btn-primary btn-rounded">Edit</button>
             ) : (
-              <button className="btn btn-primary btn-rounded">Follow</button>
+              <button className="btn btn-primary btn-rounded">
+                {isFollowed() ? "Unfollow" : "Follow"}
+              </button>
             )}
           </div>
         </div>
@@ -51,12 +64,14 @@ const Header = ({
             to={`${match.url}/following`}
             className="profile-header__nav_link pt-2 pb-2 pl-4 pr-4"
           >
+            <span className="text-muted mr-2">{friends.following_count}</span>
             Following
           </NavLink>
           <NavLink
             to={`${match.url}/followers`}
             className="profile-header__nav_link pt-2 pb-2 pl-4 pr-4"
           >
+            <span className="text-muted mr-2">{friends.followers_count}</span>
             Followers
           </NavLink>
         </div>
