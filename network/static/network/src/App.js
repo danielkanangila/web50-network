@@ -10,7 +10,7 @@ import Logout from "./components/Logout";
 import Home from "./components/Home";
 import People from "./components/People";
 import Profile from "./components/Profile";
-import Settings from "./components/Settings";
+import Settings from "./components/settings/Settings";
 
 const App = () => {
   return (

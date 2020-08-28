@@ -1,6 +1,6 @@
 import React from "react";
 import * as Yup from "yup";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { Form, FormTextField, FormCheckbox, SubmitButton } from "./form";
 import { default as authApi } from "./../api/auth";
@@ -17,7 +17,6 @@ const validationSchema = Yup.object().shape({
 const Login = () => {
   const loginApi = useApi(authApi.login);
   const auth = useAuth();
-  const history = useHistory();
 
   const login = async (credentials, { setStatus }) => {
     const response = await loginApi.request(
@@ -26,7 +25,7 @@ const Login = () => {
     );
     handleBackendFeedback(response, setStatus, (user) => {
       auth.login(user);
-      history.push("/");
+      window.location = "/";
     });
   };
   return (

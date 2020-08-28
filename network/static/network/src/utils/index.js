@@ -38,11 +38,17 @@ export const request = async (apiFunc, ...args) => {
   let response;
   try {
     response = await apiFunc(...args);
-    response.ok = true;
+    response = {
+      ...response,
+      ok: true,
+    };
   } catch (error) {
     console.log(error);
     response = error.response;
-    response.ok = false;
+    response = {
+      ...response,
+      ok: false,
+    };
   }
   return response;
 };
