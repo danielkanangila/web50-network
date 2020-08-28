@@ -1,3 +1,5 @@
+export { default as ReducerSwitch } from "./ReducerSwitch";
+
 export const transformBackendErrors = (errors) => {
   const t_errors = {};
   Object.keys(errors).forEach((key) => {

@@ -23,7 +23,7 @@ const PostEditor = () => {
 
   return (
     <div className="post-card home-header">
-      <Avatar image_url={auth.user.avatar} className="avatar mr-3" />
+      <Avatar image_url={auth.user.avatar_url} className="avatar mr-3" />
       <div className="media-body">
         <Editor ref={editorRef} onSubmit={createPost} />
       </div>

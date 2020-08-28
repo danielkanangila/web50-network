@@ -13,10 +13,10 @@ const SidebarLeft = () => {
           <span className="material-icons mr-3">home</span>
           Home
         </NavLink>
-        <NavLink className="sidebar-nav--item" to="/people">
+        {/* <NavLink className="sidebar-nav--item" to="/people">
           <span className="material-icons mr-3">people</span>
           People
-        </NavLink>
+        </NavLink> */}
         <NavLink className="sidebar-nav--item" to="/profile">
           <span className="material-icons mr-3">person</span>
           Profile

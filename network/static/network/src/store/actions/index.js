@@ -1,20 +1,26 @@
 import { createAction } from "../../utils";
 import postApi from "../../api/post";
 
-export const FETCHING_POSTS_START = "FETCHING_POSTS_START";
-export const FETCHING_POSTS_SUCCESS = "FETCHING_POSTS_SUCCESS";
-export const FETCHING_POSTS_FAILURE = "FETCHING_POSTS_FAILURE";
-export const CREATE_POSTS_START = "CREATE_POSTS_START";
-export const CREATE_POSTS_SUCCESS = "CREATE_POSTS_SUCCESS";
-export const CREATE_POSTS_FAILURE = "CREATE_POSTS_FAILURE";
+export const FETCHING_POSTS = "FETCHING_POSTS";
+export const FETCHING_USER_POSTS = "FETCHING_USER_POSTS";
+export const CREATE_POSTS = "CREATE_POSTS";
 
 const getAll = () => async (dispatch) =>
-  await createAction("FETCHING_POSTS", postApi.getAll, dispatch);
+  await createAction(FETCHING_POSTS, postApi.getAll, dispatch);
+
+const getUserPosts = (userId) => async (dispatch) =>
+  await createAction(
+    FETCHING_USER_POSTS,
+    postApi.getUserPosts,
+    dispatch,
+    userId
+  );
 
 const create = (data) => async (dispatch) =>
-  await createAction("CREATE_POSTS", postApi.create, dispatch, data);
+  await createAction(CREATE_POSTS, postApi.create, dispatch, data);
 
 export default {
   getAll,
   create,
+  getUserPosts,
 };

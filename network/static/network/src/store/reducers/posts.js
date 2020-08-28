@@ -1,11 +1,6 @@
-import {
-  FETCHING_POSTS_START,
-  FETCHING_POSTS_SUCCESS,
-  FETCHING_POSTS_FAILURE,
-  CREATE_POSTS_START,
-  CREATE_POSTS_SUCCESS,
-  CREATE_POSTS_FAILURE,
-} from "../actions";
+import { FETCHING_POSTS, FETCHING_USER_POSTS, CREATE_POSTS } from "../actions";
+
+import { ReducerSwitch } from "./../../utils";
 
 const initialState = {
   data: [],
@@ -14,48 +9,39 @@ const initialState = {
 };
 
 export const posts = (state = initialState, action) => {
-  switch (action.type) {
-    case FETCHING_POSTS_START: {
-      return {
-        ...state,
-        loading: true,
-        errors: null,
-      };
-    }
-    case FETCHING_POSTS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        data: action.payload,
-        errors: null,
-      };
-    case FETCHING_POSTS_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        errors: action.payload,
-      };
-    case CREATE_POSTS_START: {
-      return {
-        ...state,
-        loading: true,
-        errors: null,
-      };
-    }
-    case CREATE_POSTS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        data: [action.payload, ...state.data],
-        errors: null,
-      };
-    case CREATE_POSTS_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        errors: action.payload,
-      };
-    default:
-      return state;
-  }
+  const mySwitch = new ReducerSwitch();
+  // Action handler
+  mySwitch.start = () => ({
+    ...state,
+    loading: true,
+    errors: null,
+  });
+  mySwitch.success = () => {
+    return {
+      ...state,
+      loading: false,
+      data: action.payload,
+      errors: null,
+    };
+  };
+  mySwitch.failure = () => ({
+    ...state,
+    loading: false,
+    errors: action.payload,
+  });
+
+  // Adding Actions
+  mySwitch.add(FETCHING_POSTS);
+  mySwitch.add(FETCHING_USER_POSTS);
+  mySwitch.add(CREATE_POSTS);
+
+  // Update posts on success created handler
+  mySwitch.update(`${CREATE_POSTS}_SUCCESS`, () => ({
+    ...state,
+    loading: false,
+    data: [action.payload, ...state.data],
+    errors: null,
+  }));
+
+  return mySwitch.switch(action);
 };

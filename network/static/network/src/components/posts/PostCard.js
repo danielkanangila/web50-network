@@ -15,7 +15,11 @@ const PostCard = ({
 }) => {
   return (
     <li className="post-card p-3 pt-4">
-      <Avatar image_url={owner_detail.avatar} className="avatar mr-3" />
+      <Avatar
+        image_url={owner_detail.avatar_url}
+        alt={`#${owner_detail.first_name}`}
+        className="avatar mr-3"
+      />
       <div className="media-body">
         <h6>
           {owner_detail.first_name} {owner_detail.last_name}
