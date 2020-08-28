@@ -1,6 +1,4 @@
-import client, { getAuthToken } from "./client";
-
-const authToken = getAuthToken();
+import client from "./client";
 
 const update = (formData) => {
   const data = new FormData();
@@ -12,21 +10,12 @@ const update = (formData) => {
     data.append("avatar", formData.avatar.file[0]);
   }
 
-  return client.put("/auth/user", data, {
-    headers: {
-      Authorization: `Token ${authToken}`,
-    },
-  });
+  return client.put("/auth/users", data);
 };
 
-const get = () =>
-  client.get("/auth/user", {
-    headers: {
-      Authorization: `Token ${authToken}`,
-    },
-  });
+const getInfo = (user_id) => client.get(`/auth/users/${user_id}`);
 
 export default {
   update,
-  get,
+  getInfo,
 };

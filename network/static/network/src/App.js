@@ -9,7 +9,7 @@ import Route from "./components/Route";
 import Logout from "./components/Logout";
 import Home from "./components/Home";
 import People from "./components/People";
-import Profile from "./components/Profile";
+import Profile from "./components/profile/Profile";
 import Settings from "./components/settings/Settings";
 
 const App = () => {
@@ -17,7 +17,7 @@ const App = () => {
     <Switch>
       <ProtectedRoute exact path="/" component={Home} />
       <ProtectedRoute path="/people" component={People} />
-      <ProtectedRoute path="/profile" component={Profile} />
+      <ProtectedRoute path="/profile/:user_id" component={Profile} />
       <ProtectedRoute path="/settings" component={Settings} />
       <ProtectedRoute
         path="/complete-registration"

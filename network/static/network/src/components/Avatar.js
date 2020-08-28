@@ -1,9 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 
-const Avatar = ({ image_url, alt, width = 64, height = 64, className }) => {
+const Avatar = ({
+  image_url,
+  alt,
+  width = 64,
+  height = 64,
+  className,
+  onClick,
+}) => {
   return (
-    <Wrapper width={width} height={height} className={className}>
+    <Wrapper
+      width={width}
+      height={height}
+      className={className}
+      onClick={onClick}
+    >
       <img
         src={image_url ? image_url : require("../media/profile_pic.png")}
         alt={alt}

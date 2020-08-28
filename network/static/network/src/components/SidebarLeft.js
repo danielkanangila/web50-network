@@ -1,8 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "./Logo";
+import useAuth from "../hooks/useAuth";
 
 const SidebarLeft = () => {
+  const auth = useAuth();
   return (
     <div className="sidebar sidebar-left sticky-top">
       <div className="sidebar-header">
@@ -17,7 +19,7 @@ const SidebarLeft = () => {
           <span className="material-icons mr-3">people</span>
           People
         </NavLink> */}
-        <NavLink className="sidebar-nav--item" to="/profile">
+        <NavLink className="sidebar-nav--item" to={`/profile/${auth.user.id}`}>
           <span className="material-icons mr-3">person</span>
           Profile
         </NavLink>

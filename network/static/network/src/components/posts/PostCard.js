@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 import Avatar from "../Avatar";
 
@@ -13,12 +14,14 @@ const PostCard = ({
   comments,
   created_at,
 }) => {
+  const history = useHistory();
   return (
     <li className="post-card p-3 pt-4">
       <Avatar
         image_url={owner_detail.avatar_url}
         alt={`#${owner_detail.first_name}`}
         className="avatar mr-3"
+        onClick={() => history.push(`/profile/${owner_detail.id}`)}
       />
       <div className="media-body">
         <h6>
