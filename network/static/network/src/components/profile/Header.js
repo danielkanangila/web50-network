@@ -1,6 +1,7 @@
 import React from "react";
 import Avatar from "../Avatar";
 import Loader from "../Loader";
+import { NavLink, useRouteMatch } from "react-router-dom";
 
 const Header = ({
   avatar_url,
@@ -11,10 +12,11 @@ const Header = ({
   request_id,
   loading,
 }) => {
+  const match = useRouteMatch();
   if (loading) return <Loader show={loading} />;
   return (
-    <div className="profile-header p-4">
-      <div className="profile-header__top mb-2">
+    <div className="profile-header">
+      <div className="profile-header__top mb-2 p-4">
         <div className="d-flex w-100 justify-content-between align-items-baseline">
           <Avatar
             image_url={avatar_url}
@@ -32,8 +34,32 @@ const Header = ({
         </div>
       </div>
       <div className="profile-header__bottom">
-        <h5>{`${first_name} ${last_name}`}</h5>
-        <p className="text-mute">Bio: {bio}</p>
+        <div className="pl-4 pr-4">
+          <h5>{`${first_name} ${last_name}`}</h5>
+          <p className="text-mute">Bio: {bio}</p>
+        </div>
+        {/* <div className="divider"></div> */}
+        <div className="profile-header__nav d-flex w-100 ">
+          <NavLink
+            exact
+            to={match.url}
+            className="profile-header__nav_link pt-2 pb-2 pl-4 pr-4"
+          >
+            Posts
+          </NavLink>
+          <NavLink
+            to={`${match.url}/following`}
+            className="profile-header__nav_link pt-2 pb-2 pl-4 pr-4"
+          >
+            Following
+          </NavLink>
+          <NavLink
+            to={`${match.url}/followers`}
+            className="profile-header__nav_link pt-2 pb-2 pl-4 pr-4"
+          >
+            Followers
+          </NavLink>
+        </div>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import useAuth from "../hooks/useAuth";
 const Logout = () => {
   const auth = useAuth();
   auth.logout();
+  window.location = "/login";
   return <Redirect to="/login" />;
 };
 

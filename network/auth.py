@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -10,6 +11,8 @@ from .serializers import (
     RegisterSerializer,
     UserSerializer
 )
+
+from .models import User
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -39,20 +42,25 @@ class LoginAPI(generics.GenericAPIView):
         login(request, user)
 
         return Response({
-            "user": UserSerializer(user).data,
+            "user": UserSerializer(user, context={"request": request}).data,
             "token": token
         })
 
 
-class UserAPI(generics.RetrieveUpdateAPIView):
+class UserAPI(APIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = UserSerializer
 
-    def get_object(self):
-        return self.request.user
+    def get(self, request, user_id):
+        user = request.user
+        if user_id != user.pk:
+            user = get_object_or_404(User, pk=self.kwargs.get("user_id"))
+            print(user)
+
+        return Response(UserSerializer(user, context={"request": request}).data)
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)

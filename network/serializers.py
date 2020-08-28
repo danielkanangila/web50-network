@@ -41,16 +41,25 @@ class LoginSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name',
-                  'last_name', 'email', 'bio', 'avatar', 'date_joined')
+                  'last_name', 'email', 'bio', 'avatar', 'avatar_url', 'date_joined')
         extra_kwargs = {'date_joined': {'read_only': True}}
 
     def update(self, request, *args, **kwargs):
         if self.instance.avatar and "avatar" in args[0]:
             self.instance.avatar.delete()
         return super().update(request, *args, **kwargs)
+
+    def get_avatar_url(self, user):
+        if not user.avatar:
+            return None
+        request = self.context.get("request")
+        avatar_url = user.avatar.url
+        return request.build_absolute_uri(avatar_url)
 
 
 class CommentSerializer(serializers.ModelSerializer):

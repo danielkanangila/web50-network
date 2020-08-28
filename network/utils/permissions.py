@@ -65,8 +65,8 @@ class HasPermission(permissions.BasePermission):
         return True
 
     def check_user_followers_permissions(self, request, view):
-        self.message = "Unauthorized Action."
+        # self.message = "Unauthorized Action."
 
-        if request.user.pk != view.kwargs.get("user_id"):
-            return False
+        # if request.user.pk != view.kwargs.get("user_id"):
+        #     return False
         return True

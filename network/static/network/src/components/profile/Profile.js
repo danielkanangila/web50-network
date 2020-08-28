@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Route, useRouteMatch } from "react-router-dom";
 
 import Layout from "../Layout";
 import useAuth from "../../hooks/useAuth";
@@ -9,6 +9,7 @@ import actions from "../../store/actions";
 import useApi from "../../hooks/useApi";
 import userApi from "../../api/user";
 import Header from "./Header";
+import FriendList from "./FriendList";
 
 const Profile = () => {
   const auth = useAuth();
@@ -16,6 +17,7 @@ const Profile = () => {
   const posts = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const { user_id } = useParams();
+  const match = useRouteMatch();
 
   const getProfileInfo = async () => {
     await profileApi.request(user_id);
@@ -37,7 +39,19 @@ const Profile = () => {
         />
         <div className="divider"></div>
         <div className="profile-body post-list mt-3">
-          <PostList posts={posts} />
+          <Route
+            exact
+            path={match.url}
+            render={() => <PostList posts={posts} />}
+          />
+          <Route
+            path={`${match.url}/following`}
+            render={() => <FriendList title="Following" />}
+          />
+          <Route
+            path={`${match.url}/followers`}
+            render={() => <FriendList title="Followers" />}
+          />
         </div>
       </div>
     </Layout>

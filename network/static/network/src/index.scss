@@ -216,3 +216,18 @@ hr {
   padding-left: 25px;
   padding-right: 25px;
 }
+
+.profile {
+  &-header__nav_link {
+    color: inherit;
+    transition: 0.3s;
+    border-bottom: 2px solid transparent;
+    font-weight: bold;
+    &.active,
+    &:hover {
+      text-decoration: none;
+      border-bottom: 2px solid $primary;
+      color: $primary;
+    }
+  }
+}

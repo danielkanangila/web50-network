@@ -43,9 +43,7 @@ class UserPostsAPIView(APIView):
     def get(self, request, user_id):
         post = get_list_or_404(Post, owner=user_id)
 
-        return Response({
-            "post": PostSerializer(post, many=True).data
-        })
+        return Response(PostSerializer(post, many=True, context={'request': request}).data)
 
 
 class PostMediaAPIView(generics.CreateAPIView, generics.DestroyAPIView):
