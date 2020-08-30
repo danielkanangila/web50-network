@@ -8,6 +8,7 @@ export const FETCHING_FOLLOWERS = "FETCHING_FOLLOWERS";
 export const FETCHING_PROFILE_INFO = "FETCHING_PROFILE_INFO";
 export const CREATE_POSTS = "CREATE_POSTS";
 export const FOLLOW = "FOLLOW";
+export const UNFOLLOW = "UNFOLLOW";
 
 const getAllPosts = () => async (dispatch) =>
   await createAction(FETCHING_POSTS, postApi.getAll, dispatch);
@@ -46,8 +47,28 @@ const getProfileData = (userId) => async (dispatch) => {
     type: `${FETCHING_PROFILE_INFO}_SUCCESS`,
     payload: response.data,
   });
+};
 
-  // await createAction(FETCHING_PROFILE_INFO, userApi.getInfo, dispatch, userId);
+const follow = (user_id, data) => (dispatch) => {
+  request(userApi.follow, user_id, data).then(async () => {
+    const response = await request(userApi.getInfo, data.follower);
+
+    dispatch({
+      type: `${FETCHING_PROFILE_INFO}_SUCCESS`,
+      payload: response.data,
+    });
+  });
+};
+
+const unFollow = (auth_user, follower_id, f_id) => (dispatch) => {
+  request(userApi.unFollow, auth_user, f_id).then(async () => {
+    const response = await request(userApi.getInfo, follower_id);
+
+    dispatch({
+      type: `${FETCHING_PROFILE_INFO}_SUCCESS`,
+      payload: response.data,
+    });
+  });
 };
 
 export default {
@@ -56,4 +77,6 @@ export default {
   getUserPosts,
   getFollowers,
   getProfileData,
+  follow,
+  unFollow,
 };

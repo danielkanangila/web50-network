@@ -2,6 +2,8 @@ import React from "react";
 import Avatar from "../Avatar";
 import Loader from "../Loader";
 import { NavLink, useRouteMatch } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import actions from "../../store/actions";
 
 const Header = ({
   avatar_url,
@@ -14,12 +16,23 @@ const Header = ({
   followers_count,
   following_count,
   followers,
-  following,
 }) => {
   const match = useRouteMatch();
+  const dispatch = useDispatch();
+
+  const onFollow = () => {
+    if (auth_id === request_id) return;
+    if (!isFollowed())
+      dispatch(actions.follow(auth_id, { follower: request_id }));
+    else {
+      const friendShip = followers.filter((item) => item.detail.id === auth_id);
+      dispatch(actions.unFollow(auth_id, request_id, friendShip[0].id));
+    }
+  };
+
   const isFollowed = () => {
-    if (following) {
-      const filteredFriends = following.filter(
+    if (followers) {
+      const filteredFriends = followers.filter(
         (item) => item.detail.id === auth_id
       );
       if (filteredFriends.length) return true;
@@ -43,7 +56,10 @@ const Header = ({
             {auth_id === parseInt(request_id) ? (
               <button className="btn btn-primary btn-rounded">Edit</button>
             ) : (
-              <button className="btn btn-primary btn-rounded">
+              <button
+                onClick={onFollow}
+                className="btn btn-primary btn-rounded"
+              >
                 {getFollowBtnTitle()}
               </button>
             )}

@@ -17,8 +17,16 @@ const getInfo = (user_id) => client.get(`/users/${user_id}/profile`);
 
 const getFollowers = (user_id) => client.get(`/users/${user_id}/followers`);
 
+const follow = (user_id, data) =>
+  client.post(`/users/${user_id}/followers`, data);
+
+const unFollow = (user_id, follower_id) =>
+  client.delete(`/users/${user_id}/followers/${follower_id}`);
+
 export default {
   update,
   getInfo,
   getFollowers,
+  follow,
+  unFollow,
 };

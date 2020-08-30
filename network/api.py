@@ -105,7 +105,6 @@ class UserProfileAPI(APIView):
         user = request.user
         if kwargs.get("user_id") != user.pk:
             user = get_object_or_404(User, pk=kwargs.get("user_id"))
-            print(user)
         # user serializer
         u_serializer = UserSerializer(user, context={"request": request})
 
@@ -121,8 +120,8 @@ class UserProfileAPI(APIView):
             "following_count": len(following)
         }, context={"request": request})
         # Get user Post
-        posts = get_list_or_404(Post.objects.order_by(
-            "-created_at").filter(owner=user.pk))
+        posts = Post.objects.order_by(
+            "-created_at").filter(owner=user.pk)
         p_serializer = PostSerializer(
             posts, many=True, context={'request': request})
 
