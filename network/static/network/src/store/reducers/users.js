@@ -1,4 +1,4 @@
-import { FETCHING_FOLLOWERS } from "../actions";
+import { FETCHING_FOLLOWERS, FETCHING_PROFILE_INFO } from "../actions";
 
 import { ReducerSwitch } from "./../../utils";
 
@@ -32,6 +32,7 @@ export const users = (state = initialState, action) => {
 
   // Adding Actions
   mySwitch.add(FETCHING_FOLLOWERS);
+  mySwitch.add(FETCHING_PROFILE_INFO);
 
   return mySwitch.switch(action);
 };

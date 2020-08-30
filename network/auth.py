@@ -54,13 +54,8 @@ class UserAPI(APIView):
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = UserSerializer
 
-    def get(self, request, user_id):
-        user = request.user
-        if user_id != user.pk:
-            user = get_object_or_404(User, pk=self.kwargs.get("user_id"))
-            print(user)
-
-        return Response(UserSerializer(user, context={"request": request}).data)
+    def get(self):
+        return self.request.user
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)

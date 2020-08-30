@@ -11,7 +11,7 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.getAll());
+    dispatch(actions.getAllPosts());
   }, []);
   return (
     <Layout appBar={{ title: "Home" }}>

@@ -13,7 +13,7 @@ const update = (formData) => {
   return client.put("/auth/users", data);
 };
 
-const getInfo = (user_id) => client.get(`/auth/users/${user_id}`);
+const getInfo = (user_id) => client.get(`/users/${user_id}/profile`);
 
 const getFollowers = (user_id) => client.get(`/users/${user_id}/followers`);
 

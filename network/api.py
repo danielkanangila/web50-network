@@ -21,6 +21,7 @@ from .serializers import (
     UserFollowerSerializer,
     FollowerFollowingSerializer,
     FollowerDetailSerializer,
+    UserSerializer
 )
 
 
@@ -94,6 +95,44 @@ class CommentAPIView(generics.CreateAPIView, generics.DestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENTr)
 
 
+class UserProfileAPI(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get(self, request, *args, **kwargs):
+        # get user
+        user = request.user
+        if kwargs.get("user_id") != user.pk:
+            user = get_object_or_404(User, pk=kwargs.get("user_id"))
+            print(user)
+        # user serializer
+        u_serializer = UserSerializer(user, context={"request": request})
+
+        # Get follower and following
+        user_followers = User_Followers.objects.all()
+        following = user_followers.filter(user=kwargs.get("user_id"))
+        followers = user_followers.filter(follower=kwargs.get("user_id"))
+        # Follower serializer
+        f_serializer = FollowerFollowingSerializer({
+            "followers": followers,
+            "following": following,
+            "followers_count": len(followers),
+            "following_count": len(following)
+        }, context={"request": request})
+        # Get user Post
+        posts = get_list_or_404(Post.objects.order_by(
+            "-created_at").filter(owner=user.pk))
+        p_serializer = PostSerializer(
+            posts, many=True, context={'request': request})
+
+        return Response({
+            **u_serializer.data,
+            **f_serializer.data,
+            "posts": p_serializer.data
+        })
+
+
 class UserFollowerAPIView(APIView):
     permission_classes = [
         permissions.IsAuthenticated,
@@ -103,7 +142,6 @@ class UserFollowerAPIView(APIView):
     serializer_class = UserFollowerSerializer
 
     def get(self, request, *args, **kwargs):
-        print(kwargs)
         user_followers = User_Followers.objects.all()
         following = user_followers.filter(user=kwargs.get("user_id"))
         followers = user_followers.filter(follower=kwargs.get("user_id"))

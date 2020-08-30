@@ -1,14 +1,15 @@
-import { createAction } from "../../utils";
+import { createAction, request } from "../../utils";
 import postApi from "../../api/post";
 import userApi from "../../api/user";
-import user from "../../api/user";
 
 export const FETCHING_POSTS = "FETCHING_POSTS";
 export const FETCHING_USER_POSTS = "FETCHING_USER_POSTS";
-export const CREATE_POSTS = "CREATE_POSTS";
 export const FETCHING_FOLLOWERS = "FETCHING_FOLLOWERS";
+export const FETCHING_PROFILE_INFO = "FETCHING_PROFILE_INFO";
+export const CREATE_POSTS = "CREATE_POSTS";
+export const FOLLOW = "FOLLOW";
 
-const getAll = () => async (dispatch) =>
+const getAllPosts = () => async (dispatch) =>
   await createAction(FETCHING_POSTS, postApi.getAll, dispatch);
 
 const getUserPosts = (userId) => async (dispatch) =>
@@ -31,26 +32,26 @@ const getFollowers = (userId) => async (dispatch) =>
   );
 
 const getProfileData = (userId) => async (dispatch) => {
-  Promise.resolve(
-    await createAction(
-      FETCHING_FOLLOWERS,
-      userApi.getFollowers,
-      dispatch,
-      userId
-    )
-  ).then(
-    async () =>
-      await createAction(
-        FETCHING_USER_POSTS,
-        postApi.getUserPosts,
-        dispatch,
-        userId
-      )
-  );
+  dispatch({ type: `${FETCHING_PROFILE_INFO}_START` });
+
+  const response = await request(userApi.getInfo, userId);
+
+  if (!response.ok)
+    return dispatch({
+      type: `${FETCHING_PROFILE_INFO}_FAILURE`,
+      payload: response,
+    });
+
+  dispatch({
+    type: `${FETCHING_PROFILE_INFO}_SUCCESS`,
+    payload: response.data,
+  });
+
+  // await createAction(FETCHING_PROFILE_INFO, userApi.getInfo, dispatch, userId);
 };
 
 export default {
-  getAll,
+  getAllPosts,
   create,
   getUserPosts,
   getFollowers,
