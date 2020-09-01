@@ -18,7 +18,7 @@ const SidebarLeft = () => {
         </NavLink>
         <NavLink className="sidebar-nav--item" to="/timeline">
           <MaterialIcon name="timeline" className="mr-3" />
-          Timeline
+          Following
         </NavLink>
         <NavLink className="sidebar-nav--item" to={`/profile/${auth.user.id}`}>
           <MaterialIcon name="person" className="mr-3" />

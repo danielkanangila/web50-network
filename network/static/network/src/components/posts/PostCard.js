@@ -3,6 +3,8 @@ import moment from "moment";
 import { useHistory } from "react-router-dom";
 
 import Avatar from "../Avatar";
+import PostCardHeader from "./PostCardHeader";
+import PostCardContent from "./PostCardContent";
 
 const PostCard = ({
   id,
@@ -24,33 +26,18 @@ const PostCard = ({
         onClick={() => history.push(`/profile/${owner_detail.id}`)}
       />
       <div className="media-body">
-        <h6>
-          {owner_detail.first_name} {owner_detail.last_name}
-          <small className="text-muted text-small ml-2">
-            {moment(created_at, "YYYY-MM-DD hh:mm:ss").fromNow()}
-          </small>
-        </h6>
-        <div className="media-content">{content}</div>
-        <div className="media-details mt-2">
-          <div className="comments">
-            <button className="btn-icon">
-              <span className="material-icons">mode_comment</span>
-            </button>
-            <span>{comments?.length}</span>
-          </div>
-          <div className="likes">
-            <button className="btn-icon">
-              <span className="material-icons">thumb_up_alt</span>
-            </button>
-            <span>{like_count}</span>
-          </div>
-          <div className="unlike">
-            <button className="btn-icon">
-              <span className="material-icons">thumb_down_alt</span>
-            </button>
-            <span>{unlike_count}</span>
-          </div>
-        </div>
+        <PostCardHeader
+          ownerId={owner_detail.id}
+          displayName={`${owner_detail.first_name} ${owner_detail.last_name}`}
+          createdAt={created_at}
+        />
+        <PostCardContent
+          content={content}
+          comments={comments}
+          like_count={like_count}
+          unlike_count={unlike_count}
+          post_id={id}
+        />
       </div>
     </li>
   );
