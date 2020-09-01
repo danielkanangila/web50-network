@@ -9,6 +9,7 @@ export const FETCHING_PROFILE_INFO = "FETCHING_PROFILE_INFO";
 export const CREATE_POSTS = "CREATE_POSTS";
 export const FOLLOW = "FOLLOW";
 export const UNFOLLOW = "UNFOLLOW";
+export const FETCHING_TIMELINE = "FETCHING_TIMELINE";
 
 const getAllPosts = () => async (dispatch) =>
   await createAction(FETCHING_POSTS, postApi.getAll, dispatch);
@@ -71,6 +72,14 @@ const unFollow = (auth_user, follower_id, f_id) => (dispatch) => {
   });
 };
 
+const getTimeline = (userId) => async (dispatch) =>
+  await createAction(
+    FETCHING_USER_POSTS,
+    userApi.getTimeline,
+    dispatch,
+    userId
+  );
+
 export default {
   getAllPosts,
   create,
@@ -79,4 +88,5 @@ export default {
   getProfileData,
   follow,
   unFollow,
+  getTimeline,
 };

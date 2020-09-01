@@ -9,6 +9,9 @@ const PostList = ({ posts }) => {
       <Loader show={posts?.loading} />
       {!posts?.loading && (
         <div className="list-unstyled w-100">
+          {!posts?.data?.length && (
+            <h5 className="text-muted text-center mt-5">No posts found.</h5>
+          )}
           {posts?.data?.map((post) => (
             <React.Fragment key={post.id}>
               <PostCard {...post} />
