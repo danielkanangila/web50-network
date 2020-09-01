@@ -231,3 +231,12 @@ hr {
     }
   }
 }
+
+.dropdown-toggle:after {
+  content: none;
+}
+
+.dropdown-menu.show {
+  background-color: $white;
+  z-index: 700;
+}

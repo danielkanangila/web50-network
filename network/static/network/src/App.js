@@ -11,6 +11,7 @@ import Home from "./components/Home";
 import Profile from "./components/profile/Profile";
 import Settings from "./components/settings/Settings";
 import Timeline from "./components/Timeline";
+import Post from "./components/posts/Post";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
       <ProtectedRoute path="/timeline" component={Timeline} />
       <ProtectedRoute path="/profile/:user_id" component={Profile} />
       <ProtectedRoute path="/settings" component={Settings} />
+      <ProtectedRoute path="/posts/:post_id" component={Post} />
       <ProtectedRoute
         path="/complete-registration"
         component={CompleteRegistration}

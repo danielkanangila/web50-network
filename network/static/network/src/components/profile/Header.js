@@ -16,6 +16,7 @@ const Header = ({
   followers_count,
   following_count,
   followers,
+  post_count,
 }) => {
   const match = useRouteMatch();
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ const Header = ({
             to={match.url}
             className="profile-header__nav_link pt-2 pb-2 pl-4 pr-4"
           >
+            <span className="text-muted mr-2">{post_count}</span>
             Posts
           </NavLink>
           <NavLink

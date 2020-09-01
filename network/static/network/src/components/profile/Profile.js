@@ -28,6 +28,7 @@ const Profile = () => {
           {...userInfo}
           auth_id={auth.user.id}
           request_id={user_id}
+          post_count={posts?.length}
         />
         <div className="divider"></div>
         <div className="profile-body post-list mt-3">

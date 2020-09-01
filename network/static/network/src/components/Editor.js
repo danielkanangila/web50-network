@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Textarea from "./Textarea";
 import SubmitButton from "./form/SubmitButton";
@@ -6,6 +6,11 @@ import SubmitButton from "./form/SubmitButton";
 const Editor = React.forwardRef(
   ({ defaultValue = "", onSubmit, ...htmlAttributes }, ref) => {
     const [textValue, setTextValue] = useState(defaultValue);
+
+    useEffect(() => {
+      setTextValue(defaultValue);
+    }, [defaultValue]);
+
     return (
       <Wrapper {...htmlAttributes}>
         <Textarea
@@ -29,7 +34,7 @@ const Editor = React.forwardRef(
             <SubmitButton
               onSubmit={() => onSubmit(textValue)}
               className="btn btn-primary btn-sm btn-rounded"
-              title="Post"
+              title={defaultValue ? "Update" : "Post"}
             />
           </div>
         </div>

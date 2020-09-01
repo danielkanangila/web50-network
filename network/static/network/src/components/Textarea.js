@@ -33,7 +33,9 @@ const Textarea = React.forwardRef(
         value={value}
         {...otherProps}
         onChange={handleChange}
-      ></textarea>
+      >
+        {value}
+      </textarea>
     );
   }
 );

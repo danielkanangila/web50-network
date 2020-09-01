@@ -6,7 +6,7 @@ import Avatar from "../Avatar";
 import Editor from "../Editor";
 import actions from "../../store/actions";
 
-const PostEditor = () => {
+const PostEditor = ({ onEdit, onEditSubmit, value }) => {
   const dispatch = useDispatch();
   const auth = useAuth();
   const editorRef = useRef();
@@ -21,11 +21,16 @@ const PostEditor = () => {
     editorRef.current.value = "";
   };
 
+  const handleSubmit = async (data) => {
+    if (!onEdit) createPost(data);
+    else await onEditSubmit(data);
+  };
+
   return (
     <div className="post-card home-header">
       <Avatar image_url={auth.user.avatar_url} className="avatar mr-3" />
       <div className="media-body">
-        <Editor ref={editorRef} onSubmit={createPost} />
+        <Editor ref={editorRef} onSubmit={handleSubmit} defaultValue={value} />
       </div>
     </div>
   );

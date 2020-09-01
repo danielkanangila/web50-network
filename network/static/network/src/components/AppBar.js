@@ -30,7 +30,7 @@ const AppBar = ({ title, subTitle }) => {
           </button>
         )}
         <div className="d-flex flex-column">
-          <h2 className="title mb-1">{title}</h2>
+          <h2 className="title">{title}</h2>
           <small className="text-muted">{subTitle}</small>
         </div>
       </div>

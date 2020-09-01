@@ -80,6 +80,21 @@ const getTimeline = (userId) => async (dispatch) =>
     userId
   );
 
+const deletePost = (postId, URLMatch) => (dispatch) => {
+  const CALLBACK_ACTION = URLMatch.url.includes("profile")
+    ? FETCHING_PROFILE_INFO
+    : URLMatch.url === "/"
+    ? FETCHING_POSTS
+    : undefined;
+
+  request(postApi.del, postId).then((response) => {
+    if (!response.ok) return;
+    if (CALLBACK_ACTION === FETCHING_PROFILE_INFO)
+      dispatch(getProfileData(URLMatch.url.split("/").pop()));
+    if (CALLBACK_ACTION === FETCHING_POSTS) dispatch(getAllPosts());
+  });
+};
+
 export default {
   getAllPosts,
   create,
@@ -89,4 +104,5 @@ export default {
   follow,
   unFollow,
   getTimeline,
+  deletePost,
 };
