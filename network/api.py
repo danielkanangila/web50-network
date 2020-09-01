@@ -48,6 +48,23 @@ class UserPostsAPIView(APIView):
         return Response(PostSerializer(post, many=True, context={'request': request}).data)
 
 
+class TimeLineAPIView(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get(self, request, user_id):
+        following = User_Followers.filter(user=kwargs.get("user_id"))
+        posts = []
+
+        for user in following:
+            print(user)
+
+        return Response({
+            "ok": True
+        })
+
+
 class PostMediaAPIView(generics.CreateAPIView, generics.DestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticated,

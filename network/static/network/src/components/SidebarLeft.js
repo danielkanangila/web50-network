@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "./Logo";
 import useAuth from "../hooks/useAuth";
+import MaterialIcon from "./MaterialIcon";
 
 const SidebarLeft = () => {
   const auth = useAuth();
@@ -12,19 +13,19 @@ const SidebarLeft = () => {
       </div>
       <div className="sidebar-nav mt-3">
         <NavLink exact className="sidebar-nav--item" to="/">
-          <span className="material-icons mr-3">home</span>
+          <MaterialIcon name="home" className="mr-3" />
           Home
         </NavLink>
-        {/* <NavLink className="sidebar-nav--item" to="/people">
-          <span className="material-icons mr-3">people</span>
-          People
-        </NavLink> */}
+        <NavLink className="sidebar-nav--item" to="/timeline">
+          <MaterialIcon name="timeline" className="mr-3" />
+          Timeline
+        </NavLink>
         <NavLink className="sidebar-nav--item" to={`/profile/${auth.user.id}`}>
-          <span className="material-icons mr-3">person</span>
+          <MaterialIcon name="person" className="mr-3" />
           Profile
         </NavLink>
         <NavLink className="sidebar-nav--item" to="/settings">
-          <span className="material-icons mr-3">settings</span>
+          <MaterialIcon name="settings" className="mr-3" />
           Settings
         </NavLink>
       </div>

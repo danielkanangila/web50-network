@@ -1,7 +1,11 @@
 import React from "react";
 
-const MaterialIcon = ({ name }) => {
-  return <span className="material-icons">{name}</span>;
+const MaterialIcon = ({ name, className }) => {
+  return (
+    <span className={`material-icons${className ? " " + className : ""}`}>
+      {name}
+    </span>
+  );
 };
 
 export default MaterialIcon;

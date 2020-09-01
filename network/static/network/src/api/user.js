@@ -23,10 +23,13 @@ const follow = (user_id, data) =>
 const unFollow = (user_id, follower_id) =>
   client.delete(`/users/${user_id}/followers/${follower_id}`);
 
+const getTimeline = (user_id) => client.get(`/users/${user_id}/timeline`);
+
 export default {
   update,
   getInfo,
   getFollowers,
   follow,
   unFollow,
+  getTimeline,
 };
