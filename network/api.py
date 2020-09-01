@@ -53,16 +53,16 @@ class TimeLineAPIView(APIView):
         permissions.IsAuthenticated
     ]
 
-    def get(self, request, user_id):
-        following = User_Followers.filter(user=kwargs.get("user_id"))
+    def get(self, request, *args, **kwargs):
+        following = User_Followers.objects.filter(user=kwargs.get("user_id"))
+        all_posts = Post.objects.all()
         posts = []
 
         for user in following:
-            print(user)
+            user_posts = all_posts.filter(owner=user.follower.pk)
+            posts = posts + list(user_posts)
 
-        return Response({
-            "ok": True
-        })
+        return Response(PostSerializer(posts, many=True, context={"request": request}).data)
 
 
 class PostMediaAPIView(generics.CreateAPIView, generics.DestroyAPIView):

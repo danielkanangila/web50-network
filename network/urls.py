@@ -29,7 +29,7 @@ urlpatterns = [
     path("api/users/<int:user_id>/profile",
          api.UserProfileAPI.as_view(), name="user_profile"),
     path("api/users/<int:user_id>/timeline",
-         api.TimeLineAPIView.as_view(), "timeline"),
+         api.TimeLineAPIView.as_view(), name="timeline"),
     path("api/users/<int:user_id>/followers",
          api.UserFollowerAPIView.as_view(), name="user_follower"),
     path("api/users/<int:user_id>/followers/<int:pk>",

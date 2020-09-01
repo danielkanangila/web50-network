@@ -8,15 +8,15 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Route from "./components/Route";
 import Logout from "./components/Logout";
 import Home from "./components/Home";
-import People from "./components/People";
 import Profile from "./components/profile/Profile";
 import Settings from "./components/settings/Settings";
+import Timeline from "./components/Timeline";
 
 const App = () => {
   return (
     <Switch>
       <ProtectedRoute exact path="/" component={Home} />
-      <ProtectedRoute path="/people" component={People} />
+      <ProtectedRoute path="/timeline" component={Timeline} />
       <ProtectedRoute path="/profile/:user_id" component={Profile} />
       <ProtectedRoute path="/settings" component={Settings} />
       <ProtectedRoute
