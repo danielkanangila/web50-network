@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from .utils.permissions import HasPermission
+from .utils.pagination import PostPagination
 from .models import (
     PostMedia,
     Post,
@@ -32,20 +33,21 @@ class PostViewSet(viewsets.ModelViewSet):
     ]
     queryset = Post.objects.all().order_by("-created_at")
     serializer_class = PostSerializer
+    pagination_class = PostPagination
 
 
-class UserPostsAPIView(APIView):
+class UserPostsAPIView(generics.ListAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
         HasPermission
     ]
+    queryset = Post.objects.all().order_by("-created_at")
     serializer_class = PostSerializer
+    pagination_class = PostPagination
 
-    def get(self, request, user_id):
-        post = get_list_or_404(Post.objects.order_by(
-            "-created_at").filter(owner=user_id))
-
-        return Response(PostSerializer(post, many=True, context={'request': request}).data)
+    def get_queryset(self, *args, **kwargs):
+        user_id = self.kwargs.get("user_id")
+        return super().get_queryset(*args, **kwargs).filter(owner=user_id)
 
 
 class TimeLineAPIView(APIView):

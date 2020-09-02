@@ -1,4 +1,8 @@
-import { FETCHING_POSTS, FETCHING_USER_POSTS, CREATE_POSTS } from "../actions";
+import actions, {
+  FETCHING_POSTS,
+  FETCHING_USER_POSTS,
+  CREATE_POSTS,
+} from "../actions";
 
 import { ReducerSwitch } from "./../../utils";
 
@@ -40,7 +44,7 @@ export const posts = (state = initialState, action) => {
   mySwitch.update(`${CREATE_POSTS}_SUCCESS`, () => ({
     ...state,
     loading: false,
-    data: [action.payload, ...state.data],
+    data: { ...state.data, results: [action.payload, ...state.data.results] },
     errors: null,
   }));
 

@@ -8,6 +8,8 @@ import PostList from "../posts/PostList";
 import actions from "../../store/actions";
 import Header from "./Header";
 import FriendList from "./FriendList";
+import postApi from "../../api/post";
+import useApi from "../../hooks/useApi";
 
 const Profile = () => {
   const auth = useAuth();
@@ -16,7 +18,12 @@ const Profile = () => {
   const dispatch = useDispatch();
   const { user_id } = useParams();
   const match = useRouteMatch();
+  const userPosts = useApi(postApi.getUserPosts);
+
+  const getUserPosts = async () => await userPosts.request(user_id);
+
   useEffect(() => {
+    getUserPosts();
     dispatch(actions.getProfileData(user_id));
   }, [user_id]);
 
@@ -28,14 +35,14 @@ const Profile = () => {
           {...userInfo}
           auth_id={auth.user.id}
           request_id={user_id}
-          post_count={posts?.length}
+          post_count={userPosts?.data?.count}
         />
         <div className="divider"></div>
         <div className="profile-body post-list mt-3">
           <Route
             exact
             path={match.url}
-            render={() => <PostList posts={{ data: posts, loading }} />}
+            render={() => <PostList posts={userPosts} />}
           />
           <Route
             path={`${match.url}/following`}

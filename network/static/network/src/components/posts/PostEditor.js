@@ -18,12 +18,13 @@ const PostEditor = ({ onEdit, onEditSubmit, value }) => {
         content: data,
       })
     );
-    editorRef.current.value = "";
   };
 
   const handleSubmit = async (data) => {
-    if (!onEdit) createPost(data);
-    else await onEditSubmit(data);
+    if (!onEdit) {
+      createPost(data);
+      editorRef.current.value = "";
+    } else await onEditSubmit(data);
   };
 
   return (
