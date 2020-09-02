@@ -1,10 +1,14 @@
 import client from "./client";
 
-const getAll = () => client.get("/posts");
+const getAll = (query = null) =>
+  query ? client.get(`/posts${query}`) : client.get("/posts");
 
 const getById = (postId) => client.get(`/posts/${postId}`);
 
-const getUserPosts = (userId) => client.get(`/users/${userId}/posts`);
+const getUserPosts = (userId, query = null) =>
+  query
+    ? client.get(`/users/${userId}/posts${query}`)
+    : client.get(`/users/${userId}/posts`);
 
 const create = (data) => client.post("/posts/", data);
 

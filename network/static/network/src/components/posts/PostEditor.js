@@ -18,6 +18,7 @@ const PostEditor = ({ onEdit, onEditSubmit, value }) => {
         content: data,
       })
     );
+    dispatch(actions.getAllPosts());
   };
 
   const handleSubmit = async (data) => {
