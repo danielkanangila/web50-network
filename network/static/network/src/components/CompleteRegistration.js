@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-const CompleteRegistration = ({ redirectTo = "/" }) => {
+const CompleteRegistration = ({ redirectTo = "/", isEdit = false }) => {
   const auth = useAuth();
   const updateApi = useApi(userApi.update);
   const history = useHistory();
@@ -40,6 +40,7 @@ const CompleteRegistration = ({ redirectTo = "/" }) => {
     });
     handleBackendFeedback(response, setStatus, (user) => {
       auth.refresh(user);
+      if (isEdit) document.dispatchEvent(new CustomEvent("profile_updated"));
       history.push(redirectTo);
     });
   };
@@ -54,7 +55,7 @@ const CompleteRegistration = ({ redirectTo = "/" }) => {
         }}
         validationSchema={validationSchema}
         onSubmit={completeRegistration}
-        className="card auth-card cr"
+        className={isEdit ? "pl-4 pr-4 pb-5" : "card auth-card cr"}
       >
         <h3 className="mb-4">{formTitle}</h3>
         <FormTextField

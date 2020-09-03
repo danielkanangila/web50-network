@@ -1,7 +1,7 @@
 import React from "react";
 import Avatar from "../Avatar";
 import Loader from "../Loader";
-import { NavLink, useRouteMatch } from "react-router-dom";
+import { NavLink, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import actions from "../../store/actions";
 
@@ -20,6 +20,7 @@ const Header = ({
 }) => {
   const match = useRouteMatch();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const onFollow = () => {
     if (auth_id === request_id) return;
@@ -55,7 +56,12 @@ const Header = ({
           />
           <div className="d-flex">
             {auth_id === parseInt(request_id) ? (
-              <button className="btn btn-primary btn-rounded">Edit</button>
+              <button
+                onClick={() => history.push(`/profile/${auth_id}/edit`)}
+                className="btn btn-primary btn-rounded"
+              >
+                Edit
+              </button>
             ) : (
               <button
                 onClick={onFollow}

@@ -10,6 +10,8 @@ import Header from "./Header";
 import FriendList from "./FriendList";
 import postApi from "../../api/post";
 import useApi from "../../hooks/useApi";
+import EditProfile from "./EditProfile";
+import CompleteRegistration from "../CompleteRegistration";
 
 const Profile = () => {
   const auth = useAuth();
@@ -28,7 +30,9 @@ const Profile = () => {
     document.addEventListener("post_deleted", () => {
       getUserPosts();
     });
-
+    document.addEventListener("profile_updated", () =>
+      dispatch(actions.getProfileData(user_id))
+    );
     return () => [];
   }, [user_id]);
 
@@ -61,7 +65,15 @@ const Profile = () => {
               <FriendList title="Followers" list={userInfo.followers} />
             )}
           />
-          <Route path={`${match.url}/edit`} component={() => <></>} />
+          <Route
+            path={`${match.url}/edit`}
+            render={() => (
+              <CompleteRegistration
+                isEdit={true}
+                redirectTo={`/profile/${auth.user.id}`}
+              />
+            )}
+          />
         </div>
       </div>
     </Layout>

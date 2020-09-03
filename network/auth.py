@@ -58,4 +58,8 @@ class UserAPI(APIView):
         return self.request.user
 
     def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+        serializer = UserSerializer(
+            request.user, data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
