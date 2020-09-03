@@ -17,7 +17,7 @@ class HasPermission(permissions.BasePermission):
             return self.check_postmedias_permissions(request, view)
         if model_name == "comment":
             return self.check_comments_permissions(request, view)
-        if model_name == "user_followers":
+        if model_name == "friendship":
             return self.check_user_followers_permissions(request, view)
         return False
 

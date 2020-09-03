@@ -10,7 +10,7 @@ class User(AbstractUser):
     avatar = models.ImageField(blank=True, null=True, upload_to=upload_to)
 
 
-class User_Followers(models.Model):
+class Friendship(models.Model):
     user = models.ForeignKey(
         User, related_name="user_to_users", on_delete=models.CASCADE)
     follower = models.ForeignKey(

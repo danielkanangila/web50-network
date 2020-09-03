@@ -11,7 +11,7 @@ from .models import (
     PostMedia,
     Post,
     Comment,
-    User_Followers,
+    Friendship,
     User,
     Like,
     UnLike
@@ -21,12 +21,11 @@ from .serializers import (
     PostMediaSerializer,
     PostSerializer,
     CommentSerializer,
-    UserFollowerSerializer,
-    FollowerFollowingSerializer,
-    FollowerDetailSerializer,
+    FriendshipSerializer,
     UserSerializer,
     LikeSerializer,
-    UnLikeSerializer
+    UnLikeSerializer,
+    UserProfileSerializer
 )
 
 
@@ -74,53 +73,6 @@ class TimeLineAPIView(generics.ListAPIView):
         return posts
 
 
-class PostMediaAPIView(generics.CreateAPIView, generics.DestroyAPIView):
-    permission_classes = [
-        permissions.IsAuthenticated,
-        HasPermission
-    ]
-    serializer_class = PostMediaSerializer
-    parser_classes = [FormParser, MultiPartParser]
-
-    def create(self, request, post_id):
-        post = get_object_or_404(Post, pk=post_id, owner=request.user)
-        data = request.data
-        data["post"] = post_id
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        medias = serializer.save()
-        return Response({
-            "post_medias": PostMediaSerializer(medias).data
-        })
-
-
-class CommentAPIView(generics.CreateAPIView, generics.DestroyAPIView):
-    permission_classes = [
-        permissions.IsAuthenticated,
-        HasPermission
-    ]
-    serializer_class = CommentSerializer
-
-    def create(self, request, post_id):
-        data = request.data
-        data['post'] = post_id
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        comment = serializer.save()
-        return Response({
-            "comment": CommentSerializer(comment).data
-        })
-
-    def destroy(self, request, *args, **kwargs):
-        comment = Comment.objects.get(
-            pk=kwargs.get("pk"),
-            owner=request.user,
-            post=kwargs.get("post_id")
-        )
-        comment.delete()
-        return Response(status=status.HTTP_204_NO_CONTENTr)
-
-
 class UserProfileAPI(APIView):
     permission_classes = [
         permissions.IsAuthenticated
@@ -131,62 +83,34 @@ class UserProfileAPI(APIView):
         user = request.user
         if kwargs.get("user_id") != user.pk:
             user = get_object_or_404(User, pk=kwargs.get("user_id"))
-        # user serializer
-        u_serializer = UserSerializer(user, context={"request": request})
+        serializer = UserProfileSerializer(
+            user, context={"request": request})
 
-        # Get follower and following
-        user_followers = User_Followers.objects.all()
-        following = user_followers.filter(user=kwargs.get("user_id"))
-        followers = user_followers.filter(follower=kwargs.get("user_id"))
-        # Follower serializer
-        f_serializer = FollowerFollowingSerializer({
-            "followers": followers,
-            "following": following,
-            "followers_count": len(followers),
-            "following_count": len(following)
-        }, context={"request": request})
-
-        return Response({
-            **u_serializer.data,
-            **f_serializer.data,
-        })
+        return Response(serializer.data)
 
 
-class UserFollowerAPIView(APIView):
+class FriendshipAPIView(APIView):
     permission_classes = [
         permissions.IsAuthenticated,
         HasPermission,
     ]
 
-    serializer_class = UserFollowerSerializer
-
-    def get(self, request, *args, **kwargs):
-        user_followers = User_Followers.objects.all()
-        following = user_followers.filter(user=kwargs.get("user_id"))
-        followers = user_followers.filter(follower=kwargs.get("user_id"))
-        serializer = FollowerFollowingSerializer({
-            "followers": followers,
-            "following": following,
-            "followers_count": len(followers),
-            "following_count": len(following)
-        }, context={"request": request})
-
-        return Response(serializer.data)
+    serializer_class = FriendshipSerializer
 
     def post(self, request, *args, **kwargs):
         data = request.data
         data["user"] = kwargs.get("user_id")
-        serializer = UserFollowerSerializer(data=data)
+        serializer = FriendshipSerializer(data=data)
         serializer.is_valid(raise_exception=True)
-        user_follower = serializer.save()
+        friendship = serializer.save()
         return Response({
-            "follower": UserFollowerSerializer(user_follower, context={"request": request}).data
+            "follower": FriendshipSerializer(friendship, context={"request": request}).data
         })
 
     def delete(self, request, *args, **kwargs):
-        user_follower = get_object_or_404(
-            User_Followers, pk=kwargs.get("pk"), user=request.user)
-        user_follower.delete()
+        friendship = get_object_or_404(
+            Friendship, pk=kwargs.get("pk"), user=request.user)
+        friendship.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -245,3 +169,50 @@ class UnlikeAPIView(generics.CreateAPIView, generics.DestroyAPIView):
         unlike.delete()
         count = self.queryset.filter(post=kwargs.get("post_id")).count()
         return Response({"count": count})
+
+
+class CommentAPIView(generics.CreateAPIView, generics.DestroyAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated,
+        HasPermission
+    ]
+    serializer_class = CommentSerializer
+
+    def create(self, request, post_id):
+        data = request.data
+        data['post'] = post_id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        comment = serializer.save()
+        return Response({
+            "comment": CommentSerializer(comment).data
+        })
+
+    def destroy(self, request, *args, **kwargs):
+        comment = Comment.objects.get(
+            pk=kwargs.get("pk"),
+            owner=request.user,
+            post=kwargs.get("post_id")
+        )
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENTr)
+
+
+class PostMediaAPIView(generics.CreateAPIView, generics.DestroyAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated,
+        HasPermission
+    ]
+    serializer_class = PostMediaSerializer
+    parser_classes = [FormParser, MultiPartParser]
+
+    def create(self, request, post_id):
+        post = get_object_or_404(Post, pk=post_id, owner=request.user)
+        data = request.data
+        data["post"] = post_id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        medias = serializer.save()
+        return Response({
+            "post_medias": PostMediaSerializer(medias).data
+        })

@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
 from .models import (User, Post, PostMedia, Comment,
-                     User_Followers, Like, UnLike)
+                     Friendship, Like, UnLike)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -135,27 +135,7 @@ class PostSerializer(serializers.ModelSerializer):
         return False if not unlike else True
 
 
-class UserFollowerSerializer(serializers.ModelSerializer):
-    follower_detail = UserSerializer(source="follower", read_only=True)
-
-    def validate(self, attrs):
-        if attrs["user"] == attrs["follower"]:
-            raise serializers.ValidationError(
-                "Follower ID should  be different with the authenticated user ID.")
-        return attrs
-
-    class Meta:
-        model = User_Followers
-        fields = ('id', 'user', 'follower', 'follower_detail')
-        validators = [
-            UniqueTogetherValidator(
-                queryset=User_Followers.objects.all(),
-                fields=['user', 'follower']
-            )
-        ]
-
-
-class FollowerDetailSerializer(serializers.ModelSerializer):
+class FriendshipDetailSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -172,23 +152,76 @@ class FollowerDetailSerializer(serializers.ModelSerializer):
 
 
 class FollowerSerializer(serializers.ModelSerializer):
-    detail = FollowerDetailSerializer(source="user")
+    detail = FriendshipDetailSerializer(source="user")
 
     class Meta:
-        model = User_Followers
+        model = Friendship
         fields = ('id', 'detail')
 
 
 class FollowingSerializer(serializers.ModelSerializer):
-    detail = FollowerDetailSerializer(source="follower")
+    detail = FriendshipDetailSerializer(source="follower")
 
     class Meta:
-        model = User_Followers
+        model = Friendship
         fields = ('id', 'detail')
 
 
-class FollowerFollowingSerializer(serializers.Serializer):
-    followers_count = serializers.IntegerField()
-    following_count = serializers.IntegerField()
+class UserProfileSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
     followers = FollowerSerializer(many=True)
-    following = FollowingSerializer(many=True)
+    following = FollowingSerializer(many=True, source="user_to_users")
+    followers_count = serializers.SerializerMethodField()
+    following_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'bio',
+            'avatar',
+            'avatar_url',
+            'date_joined',
+            'followers',
+            'following',
+            'followers_count',
+            'following_count'
+        ]
+
+    def get_followers_count(self, obj):
+        # obj = user object
+        return obj.followers.count()
+
+    def get_following_count(self, obj):
+        return obj.user_to_users.count()
+
+    def get_avatar_url(self, user):
+        if not user.avatar:
+            return None
+        request = self.context.get("request")
+        avatar_url = user.avatar.url
+        return request.build_absolute_uri(avatar_url)
+
+
+class FriendshipSerializer(serializers.ModelSerializer):
+    follower_detail = UserSerializer(source="follower", read_only=True)
+
+    def validate(self, attrs):
+        if attrs["user"] == attrs["follower"]:
+            raise serializers.ValidationError(
+                "Follower ID should  be different with the authenticated user ID.")
+        return attrs
+
+    class Meta:
+        model = Friendship
+        fields = ('id', 'user', 'follower', 'follower_detail')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Friendship.objects.all(),
+                fields=['user', 'follower']
+            )
+        ]
