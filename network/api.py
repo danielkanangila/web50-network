@@ -141,16 +141,10 @@ class UserProfileAPI(APIView):
             "followers_count": len(followers),
             "following_count": len(following)
         }, context={"request": request})
-        # Get user Post
-        posts = Post.objects.order_by(
-            "-created_at").filter(owner=user.pk)
-        p_serializer = PostSerializer(
-            posts, many=True, context={'request': request})
 
         return Response({
             **u_serializer.data,
             **f_serializer.data,
-            "posts": p_serializer.data
         })
 
 

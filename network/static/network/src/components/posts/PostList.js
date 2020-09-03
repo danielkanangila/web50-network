@@ -44,37 +44,39 @@ const PostList = ({ posts }) => {
   return (
     <React.Fragment>
       <Loader show={posts?.loading} />
-      {!posts?.loading && (
-        <div className="list-unstyled w-100">
-          {!posts?.data?.count && (
-            <h5 className="text-muted text-center mt-5">No posts found.</h5>
-          )}
-          {data?.results?.map((post) => (
-            <React.Fragment key={post.id}>
-              <PostCard {...post} />
-              <div className="divider"></div>
-            </React.Fragment>
-          ))}
-          {data?.next && (
-            <div className="d-flex w-100 justify-content-center p-3">
-              <button
-                onClick={loadMore}
-                className="btn btn-default button-small btn-rounded border btn-hover"
-              >
-                {!loading && "More..."}
-                {loading && (
-                  <span
-                    className="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                )}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+      <div className="list-unstyled w-100">
+        {!posts?.data?.count && (
+          <h5 className="text-muted text-center mt-5">No posts found.</h5>
+        )}
+        {data?.results?.map((post) => (
+          <React.Fragment key={post.id}>
+            <PostCard {...post} />
+            <div className="divider"></div>
+          </React.Fragment>
+        ))}
+        {data?.next && <LoadMoreBTN onClick={loadMore} loading={loading} />}
+      </div>
     </React.Fragment>
+  );
+};
+
+const LoadMoreBTN = ({ onClick, loading }) => {
+  return (
+    <div className="d-flex w-100 justify-content-center p-3">
+      <button
+        onClick={onClick}
+        className="btn btn-default button-small btn-rounded border btn-hover"
+      >
+        {!loading && "More..."}
+        {loading && (
+          <span
+            className="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        )}
+      </button>
+    </div>
   );
 };
 

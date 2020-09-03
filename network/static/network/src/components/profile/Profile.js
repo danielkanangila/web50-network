@@ -14,13 +14,13 @@ import useApi from "../../hooks/useApi";
 const Profile = () => {
   const auth = useAuth();
   const { loading } = useSelector((state) => state.users);
-  const { posts, ...userInfo } = useSelector((state) => state.users.data) || [];
+  const userInfo = useSelector((state) => state.users.data) || [];
   const dispatch = useDispatch();
   const { user_id } = useParams();
   const match = useRouteMatch();
-  const userPosts = useApi(postApi.getUserPosts);
+  const posts = useApi(postApi.getUserPosts);
 
-  const getUserPosts = async () => await userPosts.request(user_id);
+  const getUserPosts = async () => await posts.request(user_id);
 
   useEffect(() => {
     getUserPosts();
@@ -40,14 +40,14 @@ const Profile = () => {
           {...userInfo}
           auth_id={auth.user.id}
           request_id={user_id}
-          post_count={userPosts?.data?.count}
+          post_count={posts?.data?.count}
         />
         <div className="divider"></div>
         <div className="profile-body post-list mt-3">
           <Route
             exact
             path={match.url}
-            render={() => <PostList posts={userPosts} />}
+            render={() => <PostList posts={posts} />}
           />
           <Route
             path={`${match.url}/following`}
