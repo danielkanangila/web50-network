@@ -89,8 +89,10 @@ const deletePost = (postId, URLMatch) => (dispatch) => {
 
   request(postApi.del, postId).then((response) => {
     if (!response.ok) return;
-    if (CALLBACK_ACTION === FETCHING_PROFILE_INFO)
-      dispatch(getProfileData(URLMatch.url.split("/").pop()));
+    if (CALLBACK_ACTION === FETCHING_PROFILE_INFO) {
+      // dispatch(getProfileData(URLMatch.url.split("/").pop()));
+      document.dispatchEvent(new CustomEvent("post_deleted"));
+    }
     if (CALLBACK_ACTION === FETCHING_POSTS) dispatch(getAllPosts());
   });
 };

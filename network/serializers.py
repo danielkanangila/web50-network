@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
-from .models import (User, Post, PostMedia, Comment, User_Followers)
+from .models import (User, Post, PostMedia, Comment, User_Followers, Like)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -77,6 +77,12 @@ class PostMediaSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class Like(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = "__all__"
+
+
 class PostSerializer(serializers.ModelSerializer):
     owner_detail = UserSerializer(source="owner", read_only=True)
     medias = PostMediaSerializer(many=True, read_only=True)
@@ -84,8 +90,8 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('id', 'owner', 'owner_detail', 'content', 'like_count',
-                  'unlike_count', 'comments', 'medias', 'created_at')
+        fields = ('id', 'owner', 'owner_detail', 'content',
+                  'comments', 'medias', 'created_at')
 
 
 class UserFollowerSerializer(serializers.ModelSerializer):

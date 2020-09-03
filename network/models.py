@@ -16,14 +16,22 @@ class User_Followers(models.Model):
     follower = models.ForeignKey(
         User, related_name="followers", on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ["user", "follower"]
+
 
 class Post(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
-    like_count = models.IntegerField(blank=True, default=0)
-    unlike_count = models.IntegerField(blank=True, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    like = models.IntegerField(default=0, blank=True)
+    unlike = models.IntegerField(default=0, blank=True)
 
 
 class PostMedia(models.Model):

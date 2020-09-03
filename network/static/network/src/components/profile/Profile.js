@@ -25,6 +25,11 @@ const Profile = () => {
   useEffect(() => {
     getUserPosts();
     dispatch(actions.getProfileData(user_id));
+    document.addEventListener("post_deleted", () => {
+      getUserPosts();
+    });
+
+    return () => [];
   }, [user_id]);
 
   return (
