@@ -16,6 +16,14 @@ const update = (postId, data) => client.put(`/posts/${postId}/`, data);
 
 const del = (postId) => client.delete(`/posts/${postId}/`);
 
+const like = (post_id) => client.post(`/posts/${post_id}/like`);
+
+const removeLike = (post_id) => client.delete(`/posts/${post_id}/like`);
+
+const unlike = (post_id, data) => client.post(`/posts/${post_id}/unlike`, data);
+
+const removeUnlike = (post_id) => client.delete(`/posts/${post_id}/unlike`);
+
 export default {
   getAll,
   create,
@@ -23,4 +31,8 @@ export default {
   getById,
   update,
   del,
+  like,
+  removeLike,
+  unlike,
+  removeUnlike,
 };

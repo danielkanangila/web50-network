@@ -13,6 +13,8 @@ const PostCard = ({
   content,
   like_count,
   unlike_count,
+  liked,
+  unlike,
   medias = [],
   comments,
   created_at,
@@ -54,6 +56,8 @@ const PostCard = ({
           like_count={like_count}
           unlike_count={unlike_count}
           post_id={id}
+          liked={liked}
+          unlike={unlike}
         />
       </div>
     </li>

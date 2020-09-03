@@ -12,7 +12,9 @@ from .models import (
     Post,
     Comment,
     User_Followers,
-    User
+    User,
+    Like,
+    UnLike
 )
 
 from .serializers import (
@@ -22,7 +24,9 @@ from .serializers import (
     UserFollowerSerializer,
     FollowerFollowingSerializer,
     FollowerDetailSerializer,
-    UserSerializer
+    UserSerializer,
+    LikeSerializer,
+    UnLikeSerializer
 )
 
 
@@ -185,3 +189,59 @@ class UserFollowerAPIView(APIView):
         user_follower.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class LikeAPIView(generics.CreateAPIView, generics.DestroyAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data={
+            "post": kwargs.get("post_id"),
+            "user": request.user.pk,
+            "like": 1
+        })
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        count = self.queryset.filter(post=kwargs.get("post_id")).count()
+
+        return Response({"count": count})
+
+    def delete(self, request, *args, **kwargs):
+        like = get_object_or_404(Like, post=kwargs.get(
+            "post_id"), user=request.user.pk)
+        like.delete()
+        count = self.queryset.filter(post=kwargs.get("post_id")).count()
+        return Response({"count": count})
+
+
+class UnlikeAPIView(generics.CreateAPIView, generics.DestroyAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+    queryset = UnLike.objects.all()
+    serializer_class = UnLikeSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data={
+            "post": kwargs.get("post_id"),
+            "user": request.user.pk,
+            "unlike": 1
+        })
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        count = self.queryset.filter(post=kwargs.get("post_id")).count()
+
+        return Response({"count": count})
+
+    def delete(self, request, *args, **kwargs):
+        unlike = get_object_or_404(UnLike, post=kwargs.get(
+            "post_id"), user=request.user.pk)
+        unlike.delete()
+        count = self.queryset.filter(post=kwargs.get("post_id")).count()
+        return Response({"count": count})

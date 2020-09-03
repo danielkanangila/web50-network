@@ -2,7 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
-from .models import (User, Post, PostMedia, Comment, User_Followers, Like)
+from .models import (User, Post, PostMedia, Comment,
+                     User_Followers, Like, UnLike)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -77,21 +78,61 @@ class PostMediaSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class Like(serializers.ModelSerializer):
+class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
         fields = "__all__"
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Like.objects.all(), fields=['post', 'user']),
+            UniqueTogetherValidator(
+                queryset=UnLike.objects.all(), fields=['post', 'user']),
+        ]
+
+
+class UnLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UnLike
+        fields = "__all__"
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Like.objects.all(), fields=['post', 'user']),
+            UniqueTogetherValidator(
+                queryset=UnLike.objects.all(), fields=['post', 'user']),
+        ]
 
 
 class PostSerializer(serializers.ModelSerializer):
     owner_detail = UserSerializer(source="owner", read_only=True)
     medias = PostMediaSerializer(many=True, read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
+    like_count = serializers.SerializerMethodField()
+    unlike_count = serializers.SerializerMethodField()
+    # post liked by the current auth user
+    liked = serializers.SerializerMethodField()
+    # post unlike by the current auth user
+    unlike = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ('id', 'owner', 'owner_detail', 'content',
-                  'comments', 'medias', 'created_at')
+        fields = ['id', 'owner', 'owner_detail', 'content',
+                  'comments', 'medias', 'created_at', 'unlike_count', 'like_count', 'liked', 'unlike']
+
+    def get_like_count(self, obj):
+        return obj.like_set.count()
+
+    def get_unlike_count(self, obj):
+        return obj.unlike_set.count()
+
+    def get_liked(self, obj):
+        like = Like.objects.all().filter(
+            post=obj.pk, user=self.context.get("request").user.pk)
+        return False if not like else True
+
+    def get_unlike(self, obj):
+        unlike = UnLike.objects.all().filter(
+            post=obj.pk, user=self.context.get("request").user.pk)
+        return False if not unlike else True
 
 
 class UserFollowerSerializer(serializers.ModelSerializer):

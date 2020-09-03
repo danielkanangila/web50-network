@@ -45,7 +45,7 @@ const PostList = ({ posts }) => {
     <React.Fragment>
       <Loader show={posts?.loading} />
       <div className="list-unstyled w-100">
-        {!posts?.data?.count && (
+        {!posts?.data?.count && !posts?.loading && (
           <h5 className="text-muted text-center mt-5">No posts found.</h5>
         )}
         {data?.results?.map((post) => (

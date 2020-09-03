@@ -31,7 +31,18 @@ class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     like = models.IntegerField(default=0, blank=True)
+
+    class Meta:
+        unique_together = ["user", "post"]
+
+
+class UnLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     unlike = models.IntegerField(default=0, blank=True)
+
+    class Meta:
+        unique_together = ["user", "post"]
 
 
 class PostMedia(models.Model):

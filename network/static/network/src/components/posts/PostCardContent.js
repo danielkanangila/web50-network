@@ -1,6 +1,8 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import MaterialIcon from "../MaterialIcon";
+import LikeButton from "./LikeButton";
+import UnLikeButton from "./UnLikeButton";
 
 const PostCardContent = ({
   content,
@@ -8,6 +10,8 @@ const PostCardContent = ({
   like_count,
   unlike_count,
   post_id,
+  liked,
+  unlike,
 }) => {
   const history = useHistory();
   return (
@@ -23,18 +27,8 @@ const PostCardContent = ({
           </button>
           <span>{comments?.length}</span>
         </div>
-        <div className="likes">
-          <button className="btn-icon">
-            <MaterialIcon name="thumb_up_alt" />
-          </button>
-          <span>{like_count}</span>
-        </div>
-        <div className="unlike">
-          <button className="btn-icon">
-            <MaterialIcon name="thumb_down_alt" />
-          </button>
-          <span>{unlike_count}</span>
-        </div>
+        <LikeButton liked={liked} postId={post_id} count={like_count} />
+        <UnLikeButton unlike={unlike} postId={post_id} count={unlike_count} />
       </div>
     </div>
   );
