@@ -27,8 +27,10 @@ const PostCardContent = ({
           </button>
           <span>{comments?.length}</span>
         </div>
-        <LikeButton liked={liked} postId={post_id} count={like_count} />
-        <UnLikeButton unlike={unlike} postId={post_id} count={unlike_count} />
+        <div>
+          <LikeButton liked={liked} postId={post_id} count={like_count} />
+          <UnLikeButton unlike={unlike} postId={post_id} count={unlike_count} />
+        </div>
       </div>
     </div>
   );

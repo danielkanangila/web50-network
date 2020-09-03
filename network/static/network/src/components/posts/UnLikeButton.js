@@ -5,13 +5,13 @@ import useApi from "../../hooks/useApi";
 
 const UnLikeButton = ({ postId, count, unlike }) => {
   const [unlikeCount, setUnlikeCount] = useState(0);
-  const [isUnlike, setIsUnlike] = useState(0);
+  const [isUnlike, setIsUnlike] = useState(false);
   const unlikeApi = useApi(postApi.unlike);
   const deleteUnlikeApi = useApi(postApi.removeUnlike);
 
   useEffect(() => {
     setUnlikeCount(count);
-    setIsUnlike(isUnlike);
+    setIsUnlike(unlike);
   }, [count, unlike]);
 
   const onClick = async (e) => {
@@ -27,7 +27,7 @@ const UnLikeButton = ({ postId, count, unlike }) => {
   };
 
   return (
-    <div className="unlike">
+    <div className="unlike d-flex align-items-center">
       <button onClick={onClick} className="btn-icon">
         <MaterialIcon
           name="thumb_down_alt"

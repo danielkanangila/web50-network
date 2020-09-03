@@ -28,7 +28,7 @@ const LikeButton = ({ postId, count, liked }) => {
   };
 
   return (
-    <div className="likes">
+    <div className="likes d-flex align-items-center mr-3">
       <button onClick={onClick} className="btn-icon">
         <MaterialIcon
           name="thumb_up_alt"
