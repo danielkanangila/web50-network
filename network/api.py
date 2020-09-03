@@ -50,21 +50,24 @@ class UserPostsAPIView(generics.ListAPIView):
         return super().get_queryset(*args, **kwargs).filter(owner=user_id)
 
 
-class TimeLineAPIView(APIView):
+class TimeLineAPIView(generics.ListAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+    queryset = Post.objects.all().order_by("-created_at")
+    serializer_class = PostSerializer
+    pagination_class = PostPagination
 
-    def get(self, request, *args, **kwargs):
-        following = User_Followers.objects.filter(user=kwargs.get("user_id"))
+    def get_queryset(self, *args, **kwargs):
+        following = User_Followers.objects.filter(
+            user=self.kwargs.get("user_id"))
         all_posts = Post.objects.all()
         posts = []
 
         for user in following:
             user_posts = all_posts.filter(owner=user.follower.pk)
             posts = posts + list(user_posts)
-
-        return Response(PostSerializer(posts, many=True, context={"request": request}).data)
+        return posts
 
 
 class PostMediaAPIView(generics.CreateAPIView, generics.DestroyAPIView):
