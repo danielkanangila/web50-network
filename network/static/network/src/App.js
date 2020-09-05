@@ -7,11 +7,12 @@ import CompleteRegistration from "./components/CompleteRegistration";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Route from "./components/Route";
 import Logout from "./components/Logout";
-import Home from "./components/Home";
+import Home from "./components/home/Home";
 import Profile from "./components/profile/Profile";
 import Settings from "./components/settings/Settings";
 import Timeline from "./components/Timeline";
 import Post from "./components/posts/Post";
+import Explorer from "./components/explorer/Explorer";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         component={CompleteRegistration}
       />
       <ProtectedRoute path="/logout" component={Logout} />
+      <Route path="/explorer" component={Explorer} />
       <Route path="/register" component={Register} />
       <Route path="/login" component={Login} />
       <Route>

@@ -12,7 +12,7 @@ const ProtectedRoute = ({ component: Component, ...restOfProps }) => {
         if (user) {
           return <Component {...props} />;
         }
-        return <Redirect to="/login" />;
+        return <Redirect to="/explorer" />;
       }}
     />
   );

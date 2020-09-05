@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import MaterialIcon from "../MaterialIcon";
 import LikeButton from "./LikeButton";
 import UnLikeButton from "./UnLikeButton";
+import useAuth from "../../hooks/useAuth";
 
 const PostCardContent = ({
   content,
@@ -13,12 +14,17 @@ const PostCardContent = ({
   liked,
   unlike,
 }) => {
+  const auth = useAuth();
   const history = useHistory();
+
+  const handleClick = () => {
+    if (auth.user) {
+      return history.push(`/posts/${post_id}`);
+    }
+    return;
+  };
   return (
-    <div
-      className="media-body__content"
-      onClick={() => history.push(`/posts/${post_id}`)}
-    >
+    <div className="media-body__content" onClick={handleClick}>
       <div className="media-content">{content}</div>
       <div className="media-details mt-2">
         <div className="comments">

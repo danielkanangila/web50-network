@@ -6,6 +6,7 @@ import Avatar from "../Avatar";
 import PostCardHeader from "./PostCardHeader";
 import PostCardContent from "./PostCardContent";
 import actions from "../../store/actions";
+import useAuth from "../../hooks/useAuth";
 
 const PostCard = ({
   id,
@@ -23,6 +24,7 @@ const PostCard = ({
   const history = useHistory();
   const match = useRouteMatch();
   const dispatch = useDispatch();
+  const auth = useAuth();
 
   const deletePost = async () => {
     dispatch(actions.deletePost(id, match));
@@ -34,13 +36,20 @@ const PostCard = ({
     return history.push(`/posts/${id}`, { edit: true });
   };
 
+  const handleClick = () => {
+    if (auth.user) {
+      return history.push(`/profile/${owner_detail?.id}`);
+    }
+    return;
+  };
+
   return (
     <li className="post-card p-3 pt-4">
       <Avatar
         image_url={owner_detail?.avatar_url}
         alt={`#${owner_detail?.first_name}`}
         className="avatar mr-3"
-        onClick={() => history.push(`/profile/${owner_detail?.id}`)}
+        onClick={handleClick}
       />
       <div className="media-body">
         <PostCardHeader

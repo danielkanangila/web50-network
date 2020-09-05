@@ -45,4 +45,5 @@ urlpatterns = [
          api.CommentAPIView.as_view(), name="post_comments"),
     path("api/posts/<int:post_id>/comments/<int:pk>",
          api.CommentAPIView.as_view(), name="post_comments"),
+    path("api/posts/explorer", api.ExplorerAPIView.as_view(), name="explorer")
 ] + router.urls

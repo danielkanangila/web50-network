@@ -171,6 +171,12 @@ class UnlikeAPIView(generics.CreateAPIView, generics.DestroyAPIView):
         return Response({"count": count})
 
 
+class ExplorerAPIView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    pagination_class = PostPagination
+
+
 class CommentAPIView(generics.CreateAPIView, generics.DestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticated,

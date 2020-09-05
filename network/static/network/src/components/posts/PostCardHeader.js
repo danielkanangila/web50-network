@@ -14,10 +14,17 @@ const PostCardHeader = ({
   const auth = useAuth();
   const history = useHistory();
 
-  const isOwner = () => ownerId === auth.user.id;
+  const isOwner = () => ownerId === auth?.user?.id;
+
+  const handleClick = () => {
+    if (auth.user) {
+      return history.push(`/profile/${ownerId}`);
+    }
+    return;
+  };
   return (
     <div className="media-body__header d-flex w-100 d-flex justify-content-between align-items-center">
-      <h6 onClick={() => history.push(`/profile/${ownerId}`)}>
+      <h6 onClick={handleClick}>
         {displayName}
         <small className="text-muted text-small ml-2">
           {moment(createdAt, "YYYY-MM-DD hh:mm:ss").fromNow()}

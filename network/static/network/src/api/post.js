@@ -24,6 +24,8 @@ const unlike = (post_id, data) => client.post(`/posts/${post_id}/unlike`, data);
 
 const removeUnlike = (post_id) => client.delete(`/posts/${post_id}/unlike`);
 
+const explorer = () => client.get("/posts/explorer");
+
 export default {
   getAll,
   create,
@@ -35,4 +37,5 @@ export default {
   removeLike,
   unlike,
   removeUnlike,
+  explorer,
 };

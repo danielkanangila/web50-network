@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import Layout from "./Layout";
-import PostList from "./posts/PostList";
-import PostEditor from "./posts/PostEditor";
-import actions from "../store/actions";
+import Layout from "../Layout";
+import PostList from "../posts/PostList";
+import PostEditor from "../posts/PostEditor";
+import actions from "../../store/actions";
 
 const Home = () => {
   const posts = useSelector((state) => state.posts);
