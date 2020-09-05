@@ -62,7 +62,7 @@ class TimeLineAPIView(generics.ListAPIView):
     pagination_class = PostPagination
 
     def get_queryset(self, *args, **kwargs):
-        following = User_Followers.objects.filter(
+        following = Friendship.objects.filter(
             user=self.kwargs.get("user_id"))
         all_posts = Post.objects.all()
         posts = []
