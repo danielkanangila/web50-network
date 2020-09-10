@@ -4,12 +4,17 @@ import Textarea from "./Textarea";
 import SubmitButton from "./form/SubmitButton";
 
 const Editor = React.forwardRef(
-  ({ defaultValue = "", onSubmit, ...htmlAttributes }, ref) => {
+  ({ defaultValue = "", onSubmit, title, ...htmlAttributes }, ref) => {
     const [textValue, setTextValue] = useState(defaultValue);
 
     useEffect(() => {
       setTextValue(defaultValue);
     }, [defaultValue]);
+
+    const getBtnTitle = () => {
+      if (title) return title;
+      return defaultValue ? "Update" : "Post";
+    };
 
     return (
       <Wrapper {...htmlAttributes}>
@@ -34,7 +39,7 @@ const Editor = React.forwardRef(
             <SubmitButton
               onSubmit={() => onSubmit(textValue)}
               className="btn btn-primary btn-sm btn-rounded"
-              title={defaultValue ? "Update" : "Post"}
+              title={getBtnTitle()}
             />
           </div>
         </div>

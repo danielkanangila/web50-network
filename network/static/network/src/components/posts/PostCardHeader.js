@@ -17,6 +17,7 @@ const PostCardHeader = ({
   const isOwner = () => ownerId === auth?.user?.id;
 
   const handleClick = () => {
+    // go to the user profile page only if user is authenticated
     if (auth.user) {
       return history.push(`/profile/${ownerId}`);
     }

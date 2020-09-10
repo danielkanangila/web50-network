@@ -70,6 +70,10 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ("id", "owner", "owner_detail", "post", "content", "like_count",
                   "unlike_count", "created_at")
+        extra_kwargs = {
+            "like_count": {"read_only": True},
+            "unlike_count": {"read_only": True}
+        }
 
 
 class PostMediaSerializer(serializers.ModelSerializer):
@@ -105,7 +109,7 @@ class UnLikeSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     owner_detail = UserSerializer(source="owner", read_only=True)
     medias = PostMediaSerializer(many=True, read_only=True)
-    comments = CommentSerializer(many=True, read_only=True)
+    comments = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
     unlike_count = serializers.SerializerMethodField()
     # post liked by the current auth user
@@ -133,6 +137,10 @@ class PostSerializer(serializers.ModelSerializer):
         unlike = UnLike.objects.all().filter(
             post=obj.pk, user=self.context.get("request").user.pk)
         return False if not unlike else True
+
+    def get_comments(self, obj):
+        comments = obj.comments.order_by("-created_at")
+        return CommentSerializer(comments, many=True, context=self.context).data
 
 
 class FriendshipDetailSerializer(serializers.ModelSerializer):

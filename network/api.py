@@ -177,12 +177,17 @@ class ExplorerAPIView(generics.ListAPIView):
     pagination_class = PostPagination
 
 
-class CommentAPIView(generics.CreateAPIView, generics.DestroyAPIView):
+class CommentAPIView(generics.CreateAPIView, generics.DestroyAPIView, generics.ListAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
         HasPermission
     ]
     serializer_class = CommentSerializer
+    queryset = Comment.objects.all().order_by("-created_at")
+
+    def get_queryset(self, *args, **kwargs):
+        post_id = self.kwargs.get("post_id")
+        return super().get_queryset(*args, **kwargs).filter(post=post_id)
 
     def create(self, request, post_id):
         data = request.data
@@ -191,7 +196,7 @@ class CommentAPIView(generics.CreateAPIView, generics.DestroyAPIView):
         serializer.is_valid(raise_exception=True)
         comment = serializer.save()
         return Response({
-            "comment": CommentSerializer(comment).data
+            "comment": CommentSerializer(comment, context={"request": request}).data
         })
 
     def destroy(self, request, *args, **kwargs):
@@ -201,7 +206,7 @@ class CommentAPIView(generics.CreateAPIView, generics.DestroyAPIView):
             post=kwargs.get("post_id")
         )
         comment.delete()
-        return Response(status=status.HTTP_204_NO_CONTENTr)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class PostMediaAPIView(generics.CreateAPIView, generics.DestroyAPIView):

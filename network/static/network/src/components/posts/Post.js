@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 import Layout from "../Layout";
 import postApi from "../../api/post";
 import useApi from "./../../hooks/useApi";
 import PostCard from "./PostCard";
 import PostEditor from "./PostEditor";
+import Comments from "./comments/Comments";
 
 const Post = () => {
   const location = useLocation();
@@ -35,7 +36,15 @@ const Post = () => {
   return (
     <Layout appBar={{ title: "Post" }}>
       {!isEdit ? (
-        <PostCard {...post.data} onEdit={() => setIsEdit(true)} />
+        <React.Fragment>
+          <PostCard {...post.data} onEdit={() => setIsEdit(true)} />
+          <div className="divider"></div>
+          <Comments
+            comments={post.data.comments}
+            postId={params.post_id}
+            refresh={getPost}
+          />
+        </React.Fragment>
       ) : (
         <PostEditor
           onEdit={true}
